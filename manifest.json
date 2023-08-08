@@ -8,22 +8,22 @@
     "short_name": "Kas Puzzle",
     "icons": [
         {
-            "src": "icon-192x192.png",
+            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-192x192.png?v=1691506407451",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "icon-256x256.png",
+            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-256x256.png?v=1691506410179",
             "sizes": "256x256",
             "type": "image/png"
         },
         {
-            "src": "icon-384x384.png",
+            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-384x384.png?v=1691506414005",
             "sizes": "384x384",
             "type": "image/png"
         },
         {
-            "src": "icon-512x512.png",
+            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-512x512.png?v=1691506417504",
             "sizes": "512x512",
             "type": "image/png"
         }
