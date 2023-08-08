@@ -13,6 +13,8 @@ td {
   box-sizing: border-box;
   transition: top 0.1s;
   position: relative; /* アニメーションのために必要なプロパティ */
+  background-size: contain; /* 画像をコンテナ内に収める */
+  background-position: center; /* 背景画像を中央に配置 */
 }
 .piece-shadow {
   width: 100%;
@@ -26,28 +28,23 @@ td {
 /*　             基本ピースの形とカラー　              */
 /****************************************************/
 .red{
-  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/red.png?v=1691519613741');
-  background-repeat: no-repeat;  
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/red.png?v=1691521708044');
 } 
 
 .yellow {
-  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/yellow.png?v=1691519616995');
-  background-repeat: no-repeat; 
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/yellow.png?v=1691521711197');
 } 
 
 .blue {
-  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/blue.png?v=1691519602129');
-  background-repeat: no-repeat; 
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/blue.png?v=1691521687529');
 } 
 
 .green {
-  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/green.png?v=1691519605885');
-  background-repeat: no-repeat; 
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/green.png?v=1691521701577');
 } 
 
 .purple {
-  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/purple.png?v=1691519610025');
-  background-repeat: no-repeat;  
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/purple.png?v=1691521704577');
 }
 
 
