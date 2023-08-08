@@ -1,0 +1,172 @@
+/****************************************************/
+/*　             MATCH文字アニメーション              */
+/****************************************************/
+ul {
+  position: absolute;
+  top: var(--match-top-margin); 
+  display: flex;
+  z-index: 5; /*これないと消える*/
+}
+li {
+  list-style: none;
+  font-family: var(--font-family);
+  font-size: var(--match-font-size);
+  letter-spacing: var(--match-letter-space);
+  animation: loading var(--match-ani-interval) linear infinite;
+  transform: translateX(calc(-50% + var(--match-translateX)));
+    text-shadow: -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color) ;
+  animation-play-state: paused;
+  animation-fill-mode: forwards;
+}
+@keyframes loading {
+  0% {
+    color: var(--base-color);
+    text-shadow: -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color) ;
+  }
+  80% {
+    color: var(--base-color);
+    text-shadow: -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color) ;
+  }
+  100% {
+    text-shadow: 0 0 7px #f9f900, 0 0 50px #af6c00, -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color) ;
+  }
+}
+li:nth-child(1) {
+  animation-delay: calc(-1 * 0.8 * var(--match-ani-interval));
+  color: var(--red-color);
+}
+li:nth-child(2) {
+  animation-delay: calc(-1 * 0.6 * var(--match-ani-interval));
+  color: var(--yellow-color);
+}	
+li:nth-child(3) {
+  animation-delay: calc(-1 * 0.4 * var(--match-ani-interval));
+  color: var(--green-color);
+}
+li:nth-child(4) {
+  animation-delay: calc(-1 * 0.2 * var(--match-ani-interval));
+  color: var(--blue-color);
+}
+li:nth-child(5) {
+  animation-delay: 0s;
+  color: var(--purple-color);
+}
+
+
+/****************************************************/
+/*　                    スコア                       */
+/****************************************************/
+#removed-pieces-count {
+  position: absolute;
+  top: var(--score-top-margin); 
+  left: 50%;
+  transform: translateX(calc(-50% + var(--score-translateX)));
+  text-align: right;
+  font-size: var(--score-text-size);
+  width: var(--score-width);
+  font-family: var(--font-family);
+  letter-spacing: 3px;
+  text-shadow: -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color) ;
+  color:var(--base-color);
+  z-index: 4; /*これないと消える*/
+}
+
+@keyframes color-change {
+  0% {
+    color: var(--red-color);
+  }
+  25% {
+    color: var(--yellow-color);
+  }
+  50% {
+    color: var(--green-color);
+  }
+  75% {
+    color: var(--blue-color);
+  }
+  100% {
+    color: var(--purple-color);
+  }
+}
+
+
+/****************************************************/
+/*　                 ボタン                          */
+/****************************************************/
+/*
+button1 {
+  position: absolute;
+  top: var(--button-top-margin); 
+  border-radius: var(--button-radius);
+  border: none;
+  letter-spacing: var(--button-letter-space);
+  width: var(--button-width);
+  height: var(--button-height);
+  background: linear-gradient(145deg, #c2c4ce, #e6e9f5);
+  box-shadow:  5px 5px 5px var(--shadow-color1),
+               -5px -5px 5px var(--highlight-color1);
+  font-size: var(--button-font-size);
+  font-family: var(--font-family);
+  text-shadow: -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color);
+  color:var(--base-color)
+}
+
+button1.clicked {
+  background: var(--base-color);
+  box-shadow: inset 10px 10px 14px var(--shadow-color2),
+            inset -10px -10px 14px var(--highlight-color2);
+}
+
+button1:hover {
+  animation: color-change 5s infinite;
+}
+*/
+
+/****************************************************/
+/*　                 タイマー代わり                   */
+/****************************************************/
+#progressbar{
+  height: 26px;
+  position: absolute;
+  top: 70px; 
+  left: 50%;
+  width: 140px;
+  transform: translateX(calc(-50% - 150px));
+  background:var(--base-color);
+  border-radius: 10px;
+  margin: -20px 0 0 -100px;
+  padding: 2px;
+  z-index: 6;
+  box-shadow: inset 2px 2px 3px var(--shadow-color1),
+              inset -2px -2px 3px var(--highlight-color1);
+
+}
+#loading{
+  transition: all 500ms ease;
+  height: 20px;
+  width: calc(100% - 10px);
+  border-radius: 8px;
+  background-image: 
+  repeating-linear-gradient(
+  135deg,
+    var(--red-color) 0px, var(--red-color) 4px,
+    var(--yellow-color) 4px,var(--yellow-color) 8px,
+    var(--green-color) 8px,var(--green-color) 12px,
+    var(--blue-color) 12px,var(--blue-color) 16px,
+    var(--purple-color) 16px,var(--purple-color) 20px
+  );
+  position: absolute;
+  margin: 3px;
+  display: inline-block;
+  animation: load 10s ease infinite;
+  animation-play-state: paused;
+  animation-fill-mode: forwards;
+}
+@keyframes load{
+  0%{
+    width: 0%;
+  }
+  10%{
+    width: 10%;
+  }
+}

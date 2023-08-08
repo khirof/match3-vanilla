@@ -1,0 +1,466 @@
+/****************************************************/
+/*　             ピースのベーススタイル               */
+/****************************************************/
+td {
+  width: 70px;
+  height: 70px;
+  border: 0px solid #ccc;
+  padding: 0;
+}
+.piece {
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  transition: top 0.1s;
+  position: relative; /* アニメーションのために必要なプロパティ */
+}
+.piece-shadow {
+  width: 100%;
+  height: 100%;
+  transition: top 0.1s;
+  position: relative;
+  filter: drop-shadow(3px 3px 2px var(--shadow-color1)) drop-shadow(-3px -3px 2px var(--highlight-color1) );
+}
+
+
+/****************************************************/
+/*　             基本ピースの形とカラー　              */
+/****************************************************/
+.red{
+  background: var(--red-color);
+clip-path: path("M35 21.511c-5.516-11.101-23.328-7.917-23.328 6.4 0 14.736 20.078 22.308 24.257 31.017 4.179-8.709 24.257-16.001 24.257-31.017 0-14.917-18.653-18.284-24.257-6.4z");
+box-shadow: 
+inset -20px 0px 30px var(--piece-body-shadow),
+inset 20px 0px 30px var(--piece-body-highlight);  
+} 
+
+.yellow {
+  background-color: var(--yellow-color);
+  clip-path: polygon(50% 0%, 60% 35%, 98% 35%, 68% 60%, 79% 91%, 50% 75%, 21% 91%, 32% 60%, 2% 35%, 40% 35%);
+  box-shadow: 
+  inset -20px 0px 30px var(--piece-body-shadow),
+  inset 20px 0px 30px var(--piece-body-highlight);  
+  } 
+
+.blue {
+  background: var(--blue-color);
+  clip-path: polygon(34.00% 10.00%,76% 10%,38.00% 42.00%,90.00% 40.00%,20.00% 95.00%,46.00% 55.00%,10.00% 57.00%);
+  box-shadow: 
+  inset -20px 0px 30px var(--piece-body-shadow),
+  inset 20px 0px 30px var(--piece-body-highlight);  
+  } 
+
+.green {
+  background: var(--green-color);
+  clip-path: polygon(50.00% 13.00%,81.00% 45.00%,87.00% 55.00%,86.00% 65.00%,85.00% 69.00%,80.00% 76.00%,70.00% 78.00%,61.00% 76.00%,54.00% 70.00%,55.00% 84.00%,63.00% 92.00%,37.00% 92.00%,46.00% 84.00%,46.00% 70.00%,39.00% 76.00%,30.00% 78.00%,20.00% 76.00%,15.00% 69.00%,14.00% 65.00%,14.00% 55.00%,19.00% 45.00%);
+  box-shadow: 
+  inset -20px 0px 30px var(--piece-body-shadow),
+  inset 20px 0px 30px var(--piece-body-highlight);  
+  } 
+
+.purple {
+  background: var(--purple-color);
+  clip-path: polygon(13.5% 72.1%,20.3% 73.8%,25.4% 73.8%,35.6% 72.1%,40.7% 68.7%,48.3% 62.8%,54.3% 53.4%,57.7% 42.4%,55.1% 31.3%,48.3% 20.3%,37.3% 10.1%,50.0% 10.9%,60.2% 12.6%,69.6% 16.9%,78.1% 25.4%,85.7% 38.1%,87.4% 50.9%,84.0% 68.7%,76.4% 78.9%,65.3% 85.7%,52.6% 90.8%,34.7% 89.1%,22.0% 82.3%);
+  box-shadow: 
+  inset -20px 0px 15px var(--piece-body-shadow),
+  inset 20px 0px 30px var(--piece-body-highlight);  
+}
+
+
+/****************************************************/
+/*　            ピース削除アニメーション               */
+/****************************************************/
+.scale-out {
+  animation-name: scaleOut;
+  animation-duration: 0.4s;
+  animation-timing-function: ease-out;
+  animation-fill-mode: forwards;
+}
+
+@keyframes scaleOut {
+  0% {
+    transform: scale(1, 1);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.3, 1.3);
+    opacity: 0.2;
+  }  100% {
+    transform: scale(1.6, 1.6);
+    opacity: 0;
+  }
+}
+
+/* Mix用 暫定*/
+.dot {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  left: 35px ;
+  top: -40px;
+  box-shadow: none;
+  filter: none;
+}
+
+/****************************************************/
+/*　       特殊ピーススタイル。ベースの形とか          */
+/****************************************************/
+.piece.special {
+  background-size: cover;
+}
+
+.piece.special.verticalStripe {
+  background: 
+  linear-gradient(0deg, 
+  var(--purple-color) 0%,
+  var(--purple-color) 33.5%, 
+  var(--blue-color) 33.5%,
+  var(--blue-color) 44.5%, 
+  var(--green-color) 44.5%, 
+  var(--green-color) 55.5%, 
+  var(--yellow-color) 55.5%, 
+  var(--yellow-color) 66.5%, 
+  var(--red-color) 66.5%, 
+  var(--red-color) 100%);
+  clip-path: polygon(12.50% 22.50%,87.50% 22.50%,87.50% 77.50%,12.50% 77.50%);
+  box-shadow: inset -8px -16px 5px var(--stripe-shadow),
+            inset 8px 16px 5px var(--stripe-highlight),
+            inset -8px -16px 10px var(--stripe-shadow),
+            inset 8px 16px 10px var(--stripe-highlight)
+            ;  
+}
+
+.piece.special.horizontalStripe {
+  background: 
+  linear-gradient(90deg, 
+  var(--purple-color) 0%,
+  var(--purple-color) 33.5%, 
+  var(--blue-color) 33.5%,
+  var(--blue-color) 44.5%, 
+  var(--green-color) 44.5%, 
+  var(--green-color) 55.5%, 
+  var(--yellow-color) 55.5%, 
+  var(--yellow-color) 66.5%, 
+  var(--red-color) 66.5%, 
+  var(--red-color) 100%);
+  clip-path: polygon(22.50% 12.50%, 22.50% 87.50%, 77.50% 87.50%, 77.70% 12.50%);
+  box-shadow: inset -16px -8px 5px var(--stripe-shadow),
+            inset 16px 8px 5px var(--stripe-highlight),
+            inset -16px -8px 10px var(--stripe-shadow),
+            inset 16px 8px 10px var(--stripe-highlight)
+            ;  
+}
+.piece.special.bomb {
+  clip-path: polygon(100.00% 50.00%,68.79% 56.84%,88.30% 82.14%,60.00% 67.32%,58.68% 99.24%,46.53% 69.70%,25.00% 93.30%,34.68% 62.86%,3.02% 67.10%,30.00% 50.00%,3.02% 32.90%,34.68% 37.14%,25.00% 6.70%,46.53% 30.30%,58.68% 0.76%,60.00% 32.68%,88.30% 17.86%,68.79% 43.16%);
+    background-image: 
+    repeating-linear-gradient(
+      135deg,
+      var(--red-color) 0px, var(--red-color) 4px,
+      var(--yellow-color) 4px,var(--yellow-color) 8px,
+      var(--green-color) 8px,var(--green-color) 12px,
+      var(--blue-color) 12px,var(--blue-color) 16px,
+      var(--purple-color) 16px,var(--purple-color) 20px
+    );
+    background-size: 200% 200%;
+    position: relative;
+    animation: bombDisplay 3s infinite ease-in-out;
+}
+
+@keyframes bombDisplay {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: -10% -10%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
+
+/*  clip-path: polygon(90.00% 50.00%, 70.82% 57.42%, 82.36% 73.91%, 63.70% 69.82%, 62.36% 90.44%, 50.00% 74.00%, 37.64% 90.44%, 36.30% 69.82%, 17.64% 73.91%, 29.18% 57.42%, 10.00% 50.00%, 29.18% 42.58%, 17.64% 26.09%, 36.30% 30.18%, 37.64% 9.56%, 50.00% 26.00%, 62.36% 9.56%, 63.70% 30.18%, 82.36% 26.09%, 70.82% 42.58%);*/
+
+/****************************************************/
+/*　         特殊ピース表示時アニメーション            */
+/****************************************************/
+.piece.special::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 80%;
+  height: 100%;
+  background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: rotate(15deg);
+  animation: sparkle 1s linear infinite;
+}
+
+@keyframes sparkle {
+  from {
+    left: -100%;
+  }
+  to {
+    left: 100%;
+  }
+}
+
+.piece.special.waitingBomb {
+  clip-path: polygon(100.00% 50.00%,68.79% 56.84%,88.30% 82.14%,60.00% 67.32%,58.68% 99.24%,46.53% 69.70%,25.00% 93.30%,34.68% 62.86%,3.02% 67.10%,30.00% 50.00%,3.02% 32.90%,34.68% 37.14%,25.00% 6.70%,46.53% 30.30%,58.68% 0.76%,60.00% 32.68%,88.30% 17.86%,68.79% 43.16%);
+  background: var(--base-color);
+  position: relative;
+  animation: bomb 0.5s linear infinite;
+}
+
+@keyframes bomb {
+  0%, 100% {
+    background: var(--red-color);
+  }
+  20% {
+    background: var(--yellow-color);
+  }
+  40% {
+    background: var(--green-color);
+  }
+  60% {
+    background: var(--blue-color);
+  }
+  80% {
+    background: var(--purple-color);
+  }
+}
+
+.piece.special.waitingDoubleBomb {
+  clip-path: polygon(100.00% 50.00%,68.79% 56.84%,88.30% 82.14%,60.00% 67.32%,58.68% 99.24%,46.53% 69.70%,25.00% 93.30%,34.68% 62.86%,3.02% 67.10%,30.00% 50.00%,3.02% 32.90%,34.68% 37.14%,25.00% 6.70%,46.53% 30.30%,58.68% 0.76%,60.00% 32.68%,88.30% 17.86%,68.79% 43.16%);
+  background: var(--base-color);
+  position: relative;
+  animation: doublebomb 2s linear infinite;
+}
+
+@keyframes doublebomb {
+  0%, 100%{
+    background: #666666;
+  }
+  50% {
+    background: #888888;
+  }
+}
+
+
+/****************************************************/
+/*　          特殊ピース発動アニメーション             */
+/****************************************************/
+.bomb-animation {
+  animation: rotation 0.5s linear forwards;
+}
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(720deg) scale(4);
+    opacity: 0;
+  }
+}
+
+.doubleBomb-animation {
+  animation: doublerotation 0.5s linear forwards;
+  clip-path: polygon(100.00% 50.00%,68.79% 56.84%,88.30% 82.14%,60.00% 67.32%,58.68% 99.24%,46.53% 69.70%,25.00% 93.30%,34.68% 62.86%,3.02% 67.10%,30.00% 50.00%,3.02% 32.90%,34.68% 37.14%,25.00% 6.70%,46.53% 30.30%,58.68% 0.76%,60.00% 32.68%,88.30% 17.86%,68.79% 43.16%);
+  background-image: 
+  repeating-linear-gradient(
+    135deg,
+    var(--red-color) 0px, var(--red-color) 4px,
+    var(--yellow-color) 4px,var(--yellow-color) 8px,
+    var(--green-color) 8px,var(--green-color) 12px,
+    var(--blue-color) 12px,var(--blue-color) 16px,
+    var(--purple-color) 16px,var(--purple-color) 20px
+  );
+}
+@keyframes doublerotation {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  80% {
+    opacity: 0.2;
+  }
+  100% {
+    transform: rotate(720deg) scale(6);
+    opacity: 0;
+  }
+}
+
+.horizontal-stripe-animation {
+  animation: shock-horizontal 0.5s linear forwards;
+}
+
+.vertical-stripe-animation {
+  animation: shock-vertical 0.5s linear forwards;
+}
+
+@keyframes shock-vertical {
+  0% {
+    transform: scaleX(0.8) scaleY(1.25);
+    opacity: 1;
+  }
+  5% {
+    transform: scaleX(1) scaleY(1);
+    opacity: 1;
+  }
+  10% {
+    transform: scaleX(0.8) scaleY(1.25);
+    opacity: 1;
+  }
+  15% {
+    transform: scaleX(1) scaleY(1);
+    opacity: 1;
+  }
+  20% {
+    transform: scaleX(0.8) scaleY(1.25);
+    opacity: 1;
+  }
+  25% {
+    transform: scaleX(0.8) scaleY(1.25);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleX(15) scaleY(1.25);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scaleX(30) scaleY(3);
+    opacity: 0;
+  }
+}
+
+@keyframes shock-horizontal {
+  0% {
+    transform: scaleX(1.25) scaleY(0.8);
+    opacity: 1;
+  }
+  5% {
+    transform: scaleX(1) scaleY(1);
+    opacity: 1;
+  }
+  10% {
+    transform: scaleX(1.25) scaleY(0.8);
+    opacity: 1;
+  }
+  15% {
+    transform: scaleX(1) scaleY(1);
+    opacity: 1;
+  }
+  20% {
+    transform: scaleX(1.25) scaleY(0.8);
+    opacity: 1;
+  }
+  25% {
+    transform: scaleX(1.25) scaleY(0.8);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleX(2) scaleY(15);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scaleX(3) scaleY(30);
+    opacity: 0;
+  }
+}
+
+.cross-stripe-animation {
+  /* animation: cross 1s forwards; */
+  animation: stretchCross 0.5s linear forwards;
+  clip-path: polygon(46.00% 0.00%,54.00% 0.00%,54.00% 46.00%,100.00% 46.00%,100.00% 54.00%,54.00% 54.00%,54.00% 100.00%,46.00% 100.00%,46.00% 54.00%,0.00% 54.00%,0.00% 46.00%,46.00% 46.00%);
+}
+
+@keyframes stretchCross {
+    0% {
+        transform: scaleX(1) scaleY(1);
+        opacity: 0.9;
+    }
+    50% {
+      transform: scaleX(20) scaleY(20);
+      opacity: 0.2;
+  }
+    100% {
+        transform: scaleX(30) scaleY(30);
+        opacity: 0;
+    }
+  }
+
+
+.verticalBomb-animation {
+  animation: shock-vertical2 0.5s linear forwards;
+  clip-path: polygon(22.50% 22.50%,77.50% 22.50%,77.50% 77.50%,22.50% 77.50%);
+  background-image: 
+  repeating-linear-gradient(
+    135deg,
+    var(--red-color) 0px, var(--red-color) 4px,
+    var(--yellow-color) 4px,var(--yellow-color) 8px,
+    var(--green-color) 8px,var(--green-color) 12px,
+    var(--blue-color) 12px,var(--blue-color) 16px,
+    var(--purple-color) 16px,var(--purple-color) 20px
+  );
+}
+
+  @keyframes shock-vertical2 {
+    0% {
+      transform: scaleX(1) scaleY(3.5);
+      opacity: 1;
+    }
+    25% {
+      transform: scaleX(6) scaleY(4);
+      opacity: 0.6;
+    }
+    50% {
+      transform: scaleX(15) scaleY(4.5);
+      opacity: 0.3;
+    }
+    100% {
+      transform: scaleX(30) scaleY(6);
+      opacity: 0;
+    }
+  }
+
+  .horizontalBomb-animation {
+    animation: shock-horizontal2 0.5s linear forwards;
+    clip-path: polygon(22.50% 22.50%,77.50% 22.50%,77.50% 77.50%,22.50% 77.50%);
+    background-image: 
+    repeating-linear-gradient(
+      135deg,
+      var(--red-color) 0px, var(--red-color) 4px,
+      var(--yellow-color) 4px,var(--yellow-color) 8px,
+      var(--green-color) 8px,var(--green-color) 12px,
+      var(--blue-color) 12px,var(--blue-color) 16px,
+      var(--purple-color) 16px,var(--purple-color) 20px
+    );
+  }
+  
+  @keyframes shock-horizontal2 {
+    0% {
+      transform: scaleX(3.5) scaleY(1);
+      opacity: 1;
+    }
+    25% {
+      transform: scaleX(4) scaleY(6);
+      opacity: 0.6;
+    }
+    50% {
+      transform: scaleX(4.5) scaleY(15);
+      opacity: 0.3;
+    }
+    100% {
+      transform: scaleX(6) scaleY(30);
+      opacity: 0;
+    }
+  }

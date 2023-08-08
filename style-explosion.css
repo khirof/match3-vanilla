@@ -1,0 +1,50 @@
+
+.exploding, .exploding:focus, .exploding:hover {
+	background: transparent;
+	color: transparent;
+}
+.exploding {
+	pointer-events: none;
+	position: relative;
+	will-change: transform;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	transform: scale(1.35);
+}
+
+.exploding2, .exploding2:focus, .exploding2:hover {
+	background: transparent;
+	color: transparent;
+}
+.exploding2 {
+	pointer-events: none;
+	position: relative;
+	will-change: transform;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	transform: scale(2.35);
+}
+
+.particle {
+	position: absolute;
+	top: 0;
+	left: 0;
+}
+.particle--debris {
+	background: var(--shadow-color1);
+}
+.particle--fire {
+	border-radius: 50%;
+}
+
+/*
+@media (prefers-color-scheme: dark) {
+	body {
+		background: #17181c;
+	}
+}
+*/

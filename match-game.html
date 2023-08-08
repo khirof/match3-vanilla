@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Matching Game</title>
+    <link rel="stylesheet" type="text/css" href="style-base.css">
+    <link rel="stylesheet" type="text/css" href="style-piece.css">
+    <link rel="stylesheet" type="text/css" href="style-object.css">
+    <link rel="stylesheet" type="text/css" href="style-wave.css">
+    <link rel="stylesheet" type="text/css" href="style-bubble.css">
+    <link rel="stylesheet" type="text/css" href="style-explosion.css">
+    <link rel="stylesheet" type="text/css" href="style-word.css">
+
+    <link rel="manifest" href="https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/manifest.webmanifest?v=1691506443637" />
+    
+    <link rel="apple-touch-icon" sizes="180x180" href="icon-192x192.png">
+    <script>
+        window.addEventListener('load', function () {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register("sw.js")
+                    .then(function (registration) {
+                        console.log("serviceWorker registed.");
+                    }).catch(function (error) {
+                        console.warn("serviceWorker error.", error);
+                    });
+            }
+        });
+    </script>
+
+    <script type="text/javascript" src="interact.min.js"></script>
+  </head>
+  <body>
+    <div id="progressbar">
+      <span id="loading"></span>
+    </div>
+    <ul id="animated-text">
+      <li>M</li>
+      <li>A</li>
+      <li>T</li>
+      <li>C</li>
+      <li>H</li>
+    </ul>
+    <div id="removed-pieces-count">0</div>
+    <div id="top-cover"></div>
+    <table id = "table">
+      <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+    <div id="shape"></div>
+    <button class="wave" id = "button">
+      <!-- <span>START</span> -->
+      <i></i>
+      <div class="text">
+        <p>
+          <span class="word buttonRed">start</span>
+          <span class="word buttonYellow">enjoy!</span>
+          <span class="word buttonRed">retry</span>
+          <span class="word buttonGreen">sure!</span>
+          <span class="word buttonRed">again</span>
+          <span class="word buttonPurple">got it!</span>
+        </p>
+      </div>
+    </button>
+    <div id = "overlay"></div>
+    <div class="gameOverContainer">
+        <div class="animate four">
+          <span>g</span><span>a</span><span>m</span><span>e</span> &nbsp;
+          <span>o</span><span>v</span><span>e</span><span>r</span>
+        </div>
+      </div>
+    <script type = "module" src="game.js"></script>
+  </body>
+</html>
