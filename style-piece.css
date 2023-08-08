@@ -19,7 +19,6 @@ td {
   height: 100%;
   transition: top 0.1s;
   position: relative;
-  filter: drop-shadow(3px 3px 2px var(--shadow-color1)) drop-shadow(-3px -3px 2px var(--highlight-color1) );
 }
 
 
@@ -27,43 +26,28 @@ td {
 /*　             基本ピースの形とカラー　              */
 /****************************************************/
 .red{
-  background: var(--red-color);
-clip-path: path("M35 21.511c-5.516-11.101-23.328-7.917-23.328 6.4 0 14.736 20.078 22.308 24.257 31.017 4.179-8.709 24.257-16.001 24.257-31.017 0-14.917-18.653-18.284-24.257-6.4z");
-box-shadow: 
-inset -20px 0px 30px var(--piece-body-shadow),
-inset 20px 0px 30px var(--piece-body-highlight);  
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/red.png?v=1691519613741');
+  background-repeat: no-repeat;  
 } 
 
 .yellow {
-  background-color: var(--yellow-color);
-  clip-path: polygon(50% 0%, 60% 35%, 98% 35%, 68% 60%, 79% 91%, 50% 75%, 21% 91%, 32% 60%, 2% 35%, 40% 35%);
-  box-shadow: 
-  inset -20px 0px 30px var(--piece-body-shadow),
-  inset 20px 0px 30px var(--piece-body-highlight);  
-  } 
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/yellow.png?v=1691519616995');
+  background-repeat: no-repeat; 
+} 
 
 .blue {
-  background: var(--blue-color);
-  clip-path: polygon(34.00% 10.00%,76% 10%,38.00% 42.00%,90.00% 40.00%,20.00% 95.00%,46.00% 55.00%,10.00% 57.00%);
-  box-shadow: 
-  inset -20px 0px 30px var(--piece-body-shadow),
-  inset 20px 0px 30px var(--piece-body-highlight);  
-  } 
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/blue.png?v=1691519602129');
+  background-repeat: no-repeat; 
+} 
 
 .green {
-  background: var(--green-color);
-  clip-path: polygon(50.00% 13.00%,81.00% 45.00%,87.00% 55.00%,86.00% 65.00%,85.00% 69.00%,80.00% 76.00%,70.00% 78.00%,61.00% 76.00%,54.00% 70.00%,55.00% 84.00%,63.00% 92.00%,37.00% 92.00%,46.00% 84.00%,46.00% 70.00%,39.00% 76.00%,30.00% 78.00%,20.00% 76.00%,15.00% 69.00%,14.00% 65.00%,14.00% 55.00%,19.00% 45.00%);
-  box-shadow: 
-  inset -20px 0px 30px var(--piece-body-shadow),
-  inset 20px 0px 30px var(--piece-body-highlight);  
-  } 
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/green.png?v=1691519605885');
+  background-repeat: no-repeat; 
+} 
 
 .purple {
-  background: var(--purple-color);
-  clip-path: polygon(13.5% 72.1%,20.3% 73.8%,25.4% 73.8%,35.6% 72.1%,40.7% 68.7%,48.3% 62.8%,54.3% 53.4%,57.7% 42.4%,55.1% 31.3%,48.3% 20.3%,37.3% 10.1%,50.0% 10.9%,60.2% 12.6%,69.6% 16.9%,78.1% 25.4%,85.7% 38.1%,87.4% 50.9%,84.0% 68.7%,76.4% 78.9%,65.3% 85.7%,52.6% 90.8%,34.7% 89.1%,22.0% 82.3%);
-  box-shadow: 
-  inset -20px 0px 15px var(--piece-body-shadow),
-  inset 20px 0px 30px var(--piece-body-highlight);  
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/purple.png?v=1691519610025');
+  background-repeat: no-repeat;  
 }
 
 
