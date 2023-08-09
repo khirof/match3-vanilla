@@ -4,7 +4,7 @@
     "display": "standalone",
     "scope": "/",
     "start_url": "/match-game.html",
-    "name": "Kas Puzzle",
+    "name": "Candy Crush",
     "short_name": "Kas Puzzle",
     "icons": [
         {

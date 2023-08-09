@@ -90,145 +90,65 @@ td {
 .piece.special {
   background-size: cover;
 }
-
 .piece.special.verticalStripe {
-  background: 
-  linear-gradient(0deg, 
-  var(--purple-color) 0%,
-  var(--purple-color) 33.5%, 
-  var(--blue-color) 33.5%,
-  var(--blue-color) 44.5%, 
-  var(--green-color) 44.5%, 
-  var(--green-color) 55.5%, 
-  var(--yellow-color) 55.5%, 
-  var(--yellow-color) 66.5%, 
-  var(--red-color) 66.5%, 
-  var(--red-color) 100%);
-  clip-path: polygon(12.50% 22.50%,87.50% 22.50%,87.50% 77.50%,12.50% 77.50%);
-  box-shadow: inset -8px -16px 5px var(--stripe-shadow),
-            inset 8px 16px 5px var(--stripe-highlight),
-            inset -8px -16px 10px var(--stripe-shadow),
-            inset 8px 16px 10px var(--stripe-highlight)
-            ;  
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_v.png?v=1691596377465');
 }
-
 .piece.special.horizontalStripe {
-  background: 
-  linear-gradient(90deg, 
-  var(--purple-color) 0%,
-  var(--purple-color) 33.5%, 
-  var(--blue-color) 33.5%,
-  var(--blue-color) 44.5%, 
-  var(--green-color) 44.5%, 
-  var(--green-color) 55.5%, 
-  var(--yellow-color) 55.5%, 
-  var(--yellow-color) 66.5%, 
-  var(--red-color) 66.5%, 
-  var(--red-color) 100%);
-  clip-path: polygon(22.50% 12.50%, 22.50% 87.50%, 77.50% 87.50%, 77.70% 12.50%);
-  box-shadow: inset -16px -8px 5px var(--stripe-shadow),
-            inset 16px 8px 5px var(--stripe-highlight),
-            inset -16px -8px 10px var(--stripe-shadow),
-            inset 16px 8px 10px var(--stripe-highlight)
-            ;  
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_h.png?v=1691596371565');
 }
 .piece.special.bomb {
-  clip-path: polygon(100.00% 50.00%,68.79% 56.84%,88.30% 82.14%,60.00% 67.32%,58.68% 99.24%,46.53% 69.70%,25.00% 93.30%,34.68% 62.86%,3.02% 67.10%,30.00% 50.00%,3.02% 32.90%,34.68% 37.14%,25.00% 6.70%,46.53% 30.30%,58.68% 0.76%,60.00% 32.68%,88.30% 17.86%,68.79% 43.16%);
-    background-image: 
-    repeating-linear-gradient(
-      135deg,
-      var(--red-color) 0px, var(--red-color) 4px,
-      var(--yellow-color) 4px,var(--yellow-color) 8px,
-      var(--green-color) 8px,var(--green-color) 12px,
-      var(--blue-color) 12px,var(--blue-color) 16px,
-      var(--purple-color) 16px,var(--purple-color) 20px
-    );
-    background-size: 200% 200%;
-    position: relative;
-    animation: bombDisplay 3s infinite ease-in-out;
-}
-
-@keyframes bombDisplay {
-  0% {
-    background-position: 0% 0%;
-  }
-  50% {
-    background-position: -10% -10%;
-  }
-  100% {
-    background-position: 0% 0%;
-  }
-}
-
-/*  clip-path: polygon(90.00% 50.00%, 70.82% 57.42%, 82.36% 73.91%, 63.70% 69.82%, 62.36% 90.44%, 50.00% 74.00%, 37.64% 90.44%, 36.30% 69.82%, 17.64% 73.91%, 29.18% 57.42%, 10.00% 50.00%, 29.18% 42.58%, 17.64% 26.09%, 36.30% 30.18%, 37.64% 9.56%, 50.00% 26.00%, 62.36% 9.56%, 63.70% 30.18%, 82.36% 26.09%, 70.82% 42.58%);*/
-
-/****************************************************/
-/*　         特殊ピース表示時アニメーション            */
-/****************************************************/
-.piece.special::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 80%;
-  height: 100%;
-  background-image: linear-gradient(
-    90deg,
-    rgba(255, 255, 255, 0) 0%,
-    rgba(255, 255, 255, 0.35) 50%,
-    rgba(255, 255, 255, 0) 100%
-  );
-  transform: rotate(15deg);
-  animation: sparkle 1s linear infinite;
-}
-
-@keyframes sparkle {
-  from {
-    left: -100%;
-  }
-  to {
-    left: 100%;
-  }
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/bomb.png?v=1691596363531');
 }
 
 .piece.special.waitingBomb {
-  clip-path: polygon(100.00% 50.00%,68.79% 56.84%,88.30% 82.14%,60.00% 67.32%,58.68% 99.24%,46.53% 69.70%,25.00% 93.30%,34.68% 62.86%,3.02% 67.10%,30.00% 50.00%,3.02% 32.90%,34.68% 37.14%,25.00% 6.70%,46.53% 30.30%,58.68% 0.76%,60.00% 32.68%,88.30% 17.86%,68.79% 43.16%);
-  background: var(--base-color);
   position: relative;
-  animation: bomb 0.5s linear infinite;
 }
-
+.piece.special.waitingBomb::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/bomb.png?v=1691596363531');
+  background-size: cover;
+  animation: bomb 1s ease-in-out infinite;
+}
 @keyframes bomb {
-  0%, 100% {
-    background: var(--red-color);
+  0%, 100% { 
+    opacity: 0.5; 
+    transform: scale(0.9); /* 縮小（元のサイズ） */
   }
-  20% {
-    background: var(--yellow-color);
-  }
-  40% {
-    background: var(--green-color);
-  }
-  60% {
-    background: var(--blue-color);
-  }
-  80% {
-    background: var(--purple-color);
+  50% { 
+    opacity: 0.1; /* 透明に近い値に変更します */
+    transform: scale(1.1); /* 拡大 */
   }
 }
 
 .piece.special.waitingDoubleBomb {
-  clip-path: polygon(100.00% 50.00%,68.79% 56.84%,88.30% 82.14%,60.00% 67.32%,58.68% 99.24%,46.53% 69.70%,25.00% 93.30%,34.68% 62.86%,3.02% 67.10%,30.00% 50.00%,3.02% 32.90%,34.68% 37.14%,25.00% 6.70%,46.53% 30.30%,58.68% 0.76%,60.00% 32.68%,88.30% 17.86%,68.79% 43.16%);
-  background: var(--base-color);
   position: relative;
-  animation: doublebomb 2s linear infinite;
 }
-
+.piece.special.waitingDoubleBomb::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/bomb.png?v=1691596363531');
+  background-size: cover;
+  animation: doublebomb 1.5s ease-in-out infinite;
+}
 @keyframes doublebomb {
-  0%, 100%{
-    background: #666666;
+  0%, 100% { 
+    opacity: 0.5; 
+    transform: scale(0.7); /* 縮小（元のサイズ） */
   }
-  50% {
-    background: #888888;
+  50% { 
+    opacity: 0.1; /* 透明に近い値に変更します */
+    transform: scale(2); /* 拡大 */
   }
 }
 
@@ -252,16 +172,8 @@ td {
 
 .doubleBomb-animation {
   animation: doublerotation 0.5s linear forwards;
-  clip-path: polygon(100.00% 50.00%,68.79% 56.84%,88.30% 82.14%,60.00% 67.32%,58.68% 99.24%,46.53% 69.70%,25.00% 93.30%,34.68% 62.86%,3.02% 67.10%,30.00% 50.00%,3.02% 32.90%,34.68% 37.14%,25.00% 6.70%,46.53% 30.30%,58.68% 0.76%,60.00% 32.68%,88.30% 17.86%,68.79% 43.16%);
-  background-image: 
-  repeating-linear-gradient(
-    135deg,
-    var(--red-color) 0px, var(--red-color) 4px,
-    var(--yellow-color) 4px,var(--yellow-color) 8px,
-    var(--green-color) 8px,var(--green-color) 12px,
-    var(--blue-color) 12px,var(--blue-color) 16px,
-    var(--purple-color) 16px,var(--purple-color) 20px
-  );
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/bomb.png?v=1691596363531');
+  background-size: 70px 70px;
 }
 @keyframes doublerotation {
   0% {
@@ -363,7 +275,6 @@ td {
   animation: stretchCross 0.5s linear forwards;
   clip-path: polygon(46.00% 0.00%,54.00% 0.00%,54.00% 46.00%,100.00% 46.00%,100.00% 54.00%,54.00% 54.00%,54.00% 100.00%,46.00% 100.00%,46.00% 54.00%,0.00% 54.00%,0.00% 46.00%,46.00% 46.00%);
 }
-
 @keyframes stretchCross {
     0% {
         transform: scaleX(1) scaleY(1);
@@ -382,19 +293,10 @@ td {
 
 .verticalBomb-animation {
   animation: shock-vertical2 0.5s linear forwards;
-  clip-path: polygon(22.50% 22.50%,77.50% 22.50%,77.50% 77.50%,22.50% 77.50%);
-  background-image: 
-  repeating-linear-gradient(
-    135deg,
-    var(--red-color) 0px, var(--red-color) 4px,
-    var(--yellow-color) 4px,var(--yellow-color) 8px,
-    var(--green-color) 8px,var(--green-color) 12px,
-    var(--blue-color) 12px,var(--blue-color) 16px,
-    var(--purple-color) 16px,var(--purple-color) 20px
-  );
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_v.png?v=1691596377465');
+  background-size: 70px 70px;
 }
-
-  @keyframes shock-vertical2 {
+@keyframes shock-vertical2 {
     0% {
       transform: scaleX(1) scaleY(3.5);
       opacity: 1;
@@ -415,18 +317,9 @@ td {
 
   .horizontalBomb-animation {
     animation: shock-horizontal2 0.5s linear forwards;
-    clip-path: polygon(22.50% 22.50%,77.50% 22.50%,77.50% 77.50%,22.50% 77.50%);
-    background-image: 
-    repeating-linear-gradient(
-      135deg,
-      var(--red-color) 0px, var(--red-color) 4px,
-      var(--yellow-color) 4px,var(--yellow-color) 8px,
-      var(--green-color) 8px,var(--green-color) 12px,
-      var(--blue-color) 12px,var(--blue-color) 16px,
-      var(--purple-color) 16px,var(--purple-color) 20px
-    );
+    background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_h.png?v=1691596371565');
+    background-size: 70px 70px;
   }
-  
   @keyframes shock-horizontal2 {
     0% {
       transform: scaleX(3.5) scaleY(1);
