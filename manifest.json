@@ -4,8 +4,8 @@
     "display": "standalone",
     "scope": "/",
     "start_url": "/match-game.html",
-    "name": "Candy Crush",
-    "short_name": "Kas Puzzle",
+    "name": "game like candy crush",
+    "short_name": "キャンクラ？",
     "icons": [
         {
             "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-192x192.png?v=1691506407451",
