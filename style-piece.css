@@ -113,16 +113,16 @@ td {
   bottom: 0;
   background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/bomb.png?v=1691596363531');
   background-size: cover;
-  animation: bomb 1s ease-in-out infinite;
+  animation: waintg-bomb 1s linear infinite;
 }
-@keyframes bomb {
+@keyframes waintg-bomb {
   0%, 100% { 
-    opacity: 0.5; 
-    transform: scale(0.9); /* 縮小（元のサイズ） */
+    opacity: 0.7; 
+    transform: scale(0.9);
   }
   50% { 
-    opacity: 0.1; /* 透明に近い値に変更します */
-    transform: scale(1.1); /* 拡大 */
+    opacity: 0.1;
+    transform: scale(1.1);
   }
 }
 
@@ -139,16 +139,16 @@ td {
   bottom: 0;
   background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/bomb.png?v=1691596363531');
   background-size: cover;
-  animation: doublebomb 1.5s ease-in-out infinite;
+  animation: waiting-double-bomb 1.5s linear infinite;
 }
-@keyframes doublebomb {
+@keyframes waiting-double-bomb {
   0%, 100% { 
-    opacity: 0.5; 
-    transform: scale(0.7); /* 縮小（元のサイズ） */
+    opacity: 0.7; 
+    transform: scale(0.7);
   }
   50% { 
-    opacity: 0.1; /* 透明に近い値に変更します */
-    transform: scale(2); /* 拡大 */
+    opacity: 0.1;
+    transform: scale(2);
   }
 }
 
