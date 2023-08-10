@@ -139,7 +139,7 @@ td {
   bottom: 0;
   background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/bomb.png?v=1691596363531');
   background-size: cover;
-  animation: waiting-double-bomb 1.5s linear infinite;
+  animation: waiting-double-bomb 1s linear infinite;
 }
 @keyframes waiting-double-bomb {
   0%, 100% { 
