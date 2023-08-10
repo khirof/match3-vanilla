@@ -10,8 +10,13 @@
         {
             "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-192x192.png?v=1691597613842",
             "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-192x192.png?v=1691597613842",
+            "sizes": "192x192",
             "type": "image/png",
-            "purpose": "maskable"          
+            "purpose": "maskable"
         },
         {
             "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-256x256.png?v=1691597843610",
