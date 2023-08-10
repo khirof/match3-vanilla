@@ -91,10 +91,10 @@ td {
   background-size: cover;
 }
 .piece.special.verticalStripe {
-  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_v.png?v=1691596377465');
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_v.png?v=1691696962278');
 }
 .piece.special.horizontalStripe {
-  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_h.png?v=1691596371565');
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_h.png?v=1691696963699');
 }
 .piece.special.bomb {
   background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/bomb.png?v=1691596363531');
@@ -293,7 +293,7 @@ td {
 
 .verticalBomb-animation {
   animation: shock-vertical2 0.5s linear forwards;
-  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_v.png?v=1691596377465');
+  background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_v.png?v=1691696962278');
   background-size: 70px 70px;
 }
 @keyframes shock-vertical2 {
@@ -317,7 +317,7 @@ td {
 
   .horizontalBomb-animation {
     animation: shock-horizontal2 0.5s linear forwards;
-    background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_h.png?v=1691596371565');
+    background-image: url('https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/stripe_h.png?v=1691696963699');
     background-size: 70px 70px;
   }
   @keyframes shock-horizontal2 {
