@@ -1,8 +1,9 @@
 {
-    "theme_color": "#f69435",
-    "background_color": "#f69435",
+    "theme_color": "#0da7fd",
+    "background_color": "#d7dae5",
     "display": "standalone",
     "scope": "/",
+    "purpose": "maskable",
     "start_url": "/match-game.html",
     "name": "game like candy crush",
     "short_name": "MatchGame",
