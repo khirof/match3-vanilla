@@ -8,28 +8,22 @@
     "short_name": "MatchGame",
     "icons": [
         {
-            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-192x192.png?v=1691597613842",
+            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-192x192.png?v=1691637216010",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-192x192.png?v=1691597613842",
-            "sizes": "192x192",
-            "type": "image/png",
-            "purpose": "maskable"
-        },
-        {
-            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-256x256.png?v=1691597843610",
+            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-256x256.png?v=1691637216462",
             "sizes": "256x256",
             "type": "image/png"
         },
         {
-            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-384x384.png?v=1691597847286",
+            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-384x384.png?v=1691637217169",
             "sizes": "384x384",
             "type": "image/png"
         },
         {
-            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-512x512.png?v=1691597851554",
+            "src": "https://cdn.glitch.global/6ad6a478-dfc9-4a95-92ff-28d2ffcd7476/icon-512x512.png?v=1691637215470",
             "sizes": "512x512",
             "type": "image/png"
         }
