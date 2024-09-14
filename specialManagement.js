@@ -411,6 +411,9 @@ function findSpecialPiece(specialTypes) {
   return foundPieces;
 }
 
+function filterOutSpecialPieces(piecesList) {
+  return piecesList.filter(piece => !piece.specialType);
+}
 
 //-------------
 // Calc Pos to AddSp 
