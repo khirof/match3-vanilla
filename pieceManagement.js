@@ -3,7 +3,7 @@
 //-------------
 import { ROWS, COLS, colors, PIECE_SIZE } from "./constants.js";
 import { addPieceToDOM, clearInnerHTML, createDiv, getElement } from "./domManipulation.js";
-import { applySpecialEffect, applySpecialPieceRules, initializeSpecialPieces, addSpecialClass } from "./specialManagement.js";
+import { applySpecialEffect, applySpecialPieceRules, initializeSpecialPieces, addSpecialClass, findSpecialPiece } from "./specialManagement.js";
 import { getMatchingPieces } from "./matchManagement.js";
 import { toggleAnimatingStat, updateScore } from "./utils.js";
 import { addDraggableEvents } from "./eventHandlers.js";
