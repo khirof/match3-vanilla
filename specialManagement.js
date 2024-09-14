@@ -150,11 +150,22 @@ function applySpecialPieceRules(matches, swapedPieces = null) {
 function checkAndAddSpecial(piece, match) {
   const specialPiece = generateSpecialPiece(match);
   if (specialPiece) {
+    // ピースを特殊ピースに変更
     addSpecialPiece(piece, specialPiece);
+    
+    // match の中に特殊ピースの情報を更新
+    const specialPieceIndex = match.findIndex(p => p.row === piece.position[0] && p.col === piece.position[1]);
+    if (specialPieceIndex !== -1) {
+      // match 内の該当するピース情報を特殊ピース情報に変更
+      match[specialPieceIndex].special = specialPiece;
+    }
+
+    // match から元のピースを削除（もしくは別の方法で処理する）
     removePieceFromMatches(piece, match);
   }
   return match;
 }
+
 
 function generateSpecialPiece(matchingPieces) {
   const matchCount = matchingPieces.length;
