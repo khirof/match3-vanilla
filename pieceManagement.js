@@ -44,31 +44,23 @@ function addPiece(pieces, row, col) {
 //-------------
 //  Remove
 //-------------
-// pieceManagement.js 内の removePieces 関数
-async function removePieces(piecesToRemovePositions) {
+async function removePieces(matches) {
   toggleAnimatingStat(true);
-  updateScore(piecesToRemovePositions, chainCount);
+  updateScore(matches, chainCount);
 
-  // 削除対象のピースをpieces配列から取得
-  const piecesToRemove = piecesToRemovePositions.map(([row, col]) => pieces[row][col]);
+  const specialPieces = matches.filter((piece) => piece.specialType);
+  const nonSpecialPieces = matches.filter((piece) => !piece.specialType);
+  const allAffectedPieces = await applySpecialEffect(specialPieces, specialPieces, nonSpecialPieces, true);   //初回特殊ピースの2重処理を避けるため、最初の特殊ピースは処理済(影響範囲考慮済)で渡す。
+  const uniqueAffectedPieces = [...new Set(allAffectedPieces.concat(nonSpecialPieces))] ; 
 
-  const specialPieces = piecesToRemove.filter((piece) => piece.specialType);
-  const nonSpecialPieces = piecesToRemove.filter((piece) => !piece.specialType);
-
-  const allAffectedPieces = await applySpecialEffect(specialPieces, specialPieces, nonSpecialPieces, true);
-
-  // 削除対象のピースを特定（特殊ピースを除外）
-  const piecesToDelete = [...new Set(allAffectedPieces.concat(nonSpecialPieces))].filter((piece) => !piece.specialType);
-
-  piecesToDelete.forEach((piece) => {
-    const [row, col] = piece.position;
-    if (pieces[row][col]) {
-      pieces[row][col] = null;
-      clearInnerHTML(row, col);
-    }
-  });
-
-  moveAndRefill();
+    uniqueAffectedPieces.forEach((piece) => {
+      const [row, col] = piece.position;
+      if (pieces[row]) {
+        pieces[row][col] = null;
+        clearInnerHTML(row, col)
+      }
+    });
+    moveAndRefill();
 }
 
 

@@ -15,7 +15,8 @@ export {
   applySpecialEffect,
   addSpecialClass,
   applySpecialPieceRules,
-  applySpecialMix
+  applySpecialMix,
+  findSpecialPiece
 };
 
 
@@ -131,33 +132,20 @@ function getSpecialPieceType(specialPiece) {
 //-------------
 //    Add
 //-------------
-// specialManagement.js 内の applySpecialPieceRules 関数
-function applySpecialPieceRules(allMatches) {
-  const piecesToRemovePositions = [];
-
-  allMatches.forEach((match) => {
-    // 特殊ピースを生成する処理
-    const specialPieceCoord = getSpecialPieceCoord(match);
-    const [row, col] = specialPieceCoord;
-    const piece = pieces[row][col];
-
-    // 特殊ピースに変換
-    checkAndAddSpecial(piece, match);
-
-    // マッチしたピースの中から、特殊ピースに変換されたピースを除外
-    const piecesToRemoveInMatch = match.filter((p) => {
-      return !(p.position[0] === row && p.position[1] === col);
-    });
-
-    // 削除対象のピースの位置を収集
-    piecesToRemoveInMatch.forEach((p) => {
-      piecesToRemovePositions.push(p.position);
-    });
+function applySpecialPieceRules(matches, swapedPieces = null) {
+  const uniqueMatches = swapedPieces ? matches : combineOverlappingMatches(matches);
+  const specialPieceCoords = swapedPieces
+    ? swapedPieces.map((piece) => ({
+      row: piece.position[0],
+      col: piece.position[1]
+    }))
+    : uniqueMatches.map(getSpecialPieceCoord);
+  const updatedMatches = specialPieceCoords.map((coord, index) => {
+    const piece = pieces[coord.row][coord.col];
+    return checkAndAddSpecial(piece, uniqueMatches[index]);
   });
-
-  return piecesToRemovePositions;
+  return updatedMatches.flat();
 }
-
 
 function checkAndAddSpecial(piece, match) {
   const specialPiece = generateSpecialPiece(match);
@@ -421,10 +409,6 @@ function findSpecialPiece(specialTypes) {
     }
   }
   return foundPieces;
-}
-
-function filterOutSpecialPieces(piecesList) {
-  return piecesList.filter(piece => !piece.specialType);
 }
 
 //-------------
