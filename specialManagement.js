@@ -272,7 +272,7 @@ function delay(ms) {
 
 async function animateSpecialPiece(piece) {
   return new Promise((resolve) => {
-    if (piece.specialType === 'none') {         //Mix時にダミーで作ったやつ。あとでなんとかしたい
+    if (piece.specialType === 'none') {
       resolve();
       return;
     }
@@ -280,32 +280,41 @@ async function animateSpecialPiece(piece) {
     let div = getElement(row, col);
     const specialPieceType = specialPieceTypes.find(type => type.specialType === piece.specialType);
     const animationClass = specialPieceType.animationClass;
+
     if (piece.specialType === 'waitingBomb' || piece.specialType === 'waitingDoubleBomb') {
       explodeAnimation(piece, div);
       resolve();
     } else {
-    if (piece.specialType === 'cross') {
-      const div2 = div.querySelector('.piece');
-      div2.style.background = '#FFFFFF';            //とりあえず暫定で強引にBGカラー変更（十字のため）
-    }
-    div.classList.add(animationClass);
-    div.addEventListener('animationend', () => {
-      div.classList.remove(animationClass);
-      if (piece.specialType === 'bomb' || piece.specialType === 'horizontalBomb' || piece.specialType === 'verticalBomb') {
-        updateSpecialType(piece, 'waitingBomb');
-        piece.shouldRetain = true;
-      } else if (piece.specialType === 'doubleBomb') {
-        updateSpecialType(piece, 'waitingDoubleBomb');
-        piece.shouldRetain = true;
-      } else if (!piece.shouldRetain) {
-        piece.shouldRetain = false;
-        div.classList.add("hide");
+      if (piece.specialType === 'cross') {
+        const div2 = div.querySelector('.piece');
+        div2.style.background = '#FFFFFF';
       }
-      resolve();
-    }, { once: true });
+
+      // イベントリスナーを先に設定
+      div.addEventListener('animationend', () => {
+        div.classList.remove(animationClass);
+        if (piece.specialType === 'bomb' || piece.specialType === 'horizontalBomb' || piece.specialType === 'verticalBomb') {
+          updateSpecialType(piece, 'waitingBomb');
+          piece.shouldRetain = true;
+        } else if (piece.specialType === 'doubleBomb') {
+          updateSpecialType(piece, 'waitingDoubleBomb');
+          piece.shouldRetain = true;
+        } else if (!piece.shouldRetain) {
+          piece.shouldRetain = false;
+          div.classList.add("hide");
+        }
+        resolve();
+      }, { once: true });
+
+      // スタイルの再計算を強制
+      void div.offsetWidth;
+
+      // アニメーションを開始
+      div.classList.add(animationClass);
     }
   });
 }
+
 
 async function explodeAnimation(piece, div) {
   const explosiveButton = new ExplosiveButton(div);
@@ -319,23 +328,28 @@ async function explodeAnimation(piece, div) {
 }
 
 async function animateAffectedPieces(affectedPieces) {
-  await delay(100);
   const animationPromises = affectedPieces.map((piece) => {
     return new Promise((resolve) => {
       const [row, col] = piece.position;
       const div = getElement(row, col);
-      div.classList.add('bubble');
       const div2 = div.querySelector('.piece');
-      div2.classList.add('scale-out');
-      div.addEventListener('animationend', () => {
+
+      // イベントリスナーを先に設定
+      div2.addEventListener('animationend', () => {
         div.classList.remove('bubble');
         div2.classList.remove('scale-out');
         div.classList.add("hide");
         resolve();
       }, { once: true });
+
+      // スタイルの再計算を強制
+      void div2.offsetWidth;
+
+      // アニメーションを開始
+      div.classList.add('bubble');
+      div2.classList.add('scale-out');
     });
   });
-  // 全てのアニメーションが完了したらPromiseを解決
   await Promise.all(animationPromises);
 }
 
