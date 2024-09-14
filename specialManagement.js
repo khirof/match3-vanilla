@@ -15,8 +15,7 @@ export {
   applySpecialEffect,
   addSpecialClass,
   applySpecialPieceRules,
-  applySpecialMix,
-  findSpecialPiece
+  applySpecialMix
 };
 
 
