@@ -1,6 +1,6 @@
 var CACHE_NAME = 'my-site-cache-v1';
 var urlsToCache = [
-  'match-game.html',
+  'index.html',
   'changeButtonWord.js',
   'constants.js',
   'domManipulation.js',
@@ -13,7 +13,7 @@ var urlsToCache = [
   'icon-384x384.png',
   'icon-512x512.png',
   'interact.min.js',
-  'manifest.webmanifest',
+  'manifest.json',
   'matchManagement.js',
   'pieceManagement.js',
   'specialManagement.js',

@@ -91,38 +91,6 @@ li:nth-child(5) {
 
 
 /****************************************************/
-/*　                 ボタン                          */
-/****************************************************/
-/*
-button1 {
-  position: absolute;
-  top: var(--button-top-margin); 
-  border-radius: var(--button-radius);
-  border: none;
-  letter-spacing: var(--button-letter-space);
-  width: var(--button-width);
-  height: var(--button-height);
-  background: linear-gradient(145deg, #c2c4ce, #e6e9f5);
-  box-shadow:  5px 5px 5px var(--shadow-color1),
-               -5px -5px 5px var(--highlight-color1);
-  font-size: var(--button-font-size);
-  font-family: var(--font-family);
-  text-shadow: -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color);
-  color:var(--base-color)
-}
-
-button1.clicked {
-  background: var(--base-color);
-  box-shadow: inset 10px 10px 14px var(--shadow-color2),
-            inset -10px -10px 14px var(--highlight-color2);
-}
-
-button1:hover {
-  animation: color-change 5s infinite;
-}
-*/
-
-/****************************************************/
 /*　                 タイマー代わり                   */
 /****************************************************/
 #progressbar{
