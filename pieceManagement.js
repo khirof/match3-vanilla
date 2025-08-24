@@ -54,6 +54,7 @@ async function removePieces(matches) {
   const uniqueAffectedPieces = [...new Set(allAffectedPieces.concat(nonSpecialPieces))] ; 
 
     uniqueAffectedPieces.forEach((piece) => {
+      if (!piece) return;
       const [row, col] = piece.position;
       if (pieces[row]) {
         pieces[row][col] = null;
@@ -74,6 +75,7 @@ function removeAndRefillMatches() {
   for (let row = 0; row < ROWS; row++) {
     for (let col = 0; col < COLS; col++) {
       const piece = pieces[row][col];
+      if (!piece) continue;
       const matchingPieces = getMatchingPieces(piece);
       if (matchingPieces.length > 0) {
         allMatches.push(matchingPieces);
@@ -141,10 +143,13 @@ async function animatePieces(targetPieces, initialYOffsets, onComplete) {
 
   const animations = targetPieces.map(async ({ row, col }, index) => {
     let piece = pieces[row][col];
+    if (!piece) return;
     let div = createDiv(row, col)
 
     div.className = 'piece';
-    div.classList.add(pieces[row][col].color);
+    if (piece && piece.color) {
+      div.classList.add(piece.color);
+    }
     addSpecialClass(div, piece)
 
     div.style.transform = `translate(0px, ${initialYOffsets[index]}px)`;

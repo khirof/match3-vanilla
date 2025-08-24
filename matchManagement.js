@@ -19,6 +19,7 @@ export {
 function findMatches(row, col, rowDelta, colDelta) {
   const matches = [];
   const piece = pieces[row][col];
+  if (!piece) return matches;
   while (true) {
     row += rowDelta;
     col += colDelta;
@@ -26,7 +27,7 @@ function findMatches(row, col, rowDelta, colDelta) {
       break;
     }
     const nextPiece = pieces[row][col];
-    if (nextPiece && nextPiece.color === piece.color) {
+    if (nextPiece && piece && nextPiece.color === piece.color) {
       matches.push(nextPiece);
     } else {
       break;
@@ -44,6 +45,7 @@ function checkMatches(piece, matches, row, col, rowDelta, colDelta) {
 }
 
 function getMatchingPieces(piece) {
+  if (!piece) return [];
   const [row, col] = piece.position;
   let matches = [];
   if (piece.specialType) {

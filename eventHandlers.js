@@ -102,6 +102,7 @@ function addSwipeEvents() {
         const newRow = row + Math.round(diffY / PIECE_SIZE);
         const newCol = col + Math.round(diffX / PIECE_SIZE);
         const piece = pieces[row][col];
+        if (!piece) return;
         handleDrag(piece, newRow, newCol, () => {
           target.style.transform = 'translate(0px, 0px)';
           target.removeAttribute('data-x');

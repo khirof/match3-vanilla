@@ -137,14 +137,14 @@ function getSpecialPieceType(specialPiece) {
 function applySpecialPieceRules(matches, swapedPieces = null) {
   const uniqueMatches = swapedPieces ? matches : combineOverlappingMatches(matches);
   const specialPieceCoords = swapedPieces
-    ? swapedPieces.map((piece) => ({
+    ? swapedPieces.filter(Boolean).map((piece) => ({
       row: piece.position[0],
       col: piece.position[1]
     }))
     : uniqueMatches.map(getSpecialPieceCoord);
   const updatedMatches = specialPieceCoords.map((coord, index) => {
     const piece = pieces[coord.row][coord.col];
-    return checkAndAddSpecial(piece, uniqueMatches[index]);
+    return piece ? checkAndAddSpecial(piece, uniqueMatches[index]) : uniqueMatches[index];
   });
   return updatedMatches.flat();
 }
@@ -215,7 +215,7 @@ async function addSpecialPiece(piece, specialPiece) {
 }
 
 function addSpecialClass(div, piece) {
-  if (piece.specialType) {
+  if (piece && piece.specialType) {
     div.classList.add('special', piece.specialType);
   } else {
     div.classList.remove('special');
@@ -235,7 +235,7 @@ async function applySpecialEffect(piecesToCheck, allAffectedPieces, initialNoSpe
     affectedPiecesThisLoop.push(...initialNoSpecialPieces);
   }
 
-  for (const piece of piecesToCheck) {
+  for (const piece of piecesToCheck.filter(Boolean)) {
     const [row, col] = piece.position;
     let affectedPieces = specialAffectedPieces(piece); // 効果範囲算出
     affectedPieces = affectedPieces.filter(   // 効果範囲重複排除
@@ -265,6 +265,7 @@ async function applySpecialEffect(piecesToCheck, allAffectedPieces, initialNoSpe
 
 function applySpecialEffectExitFn(allAffectedPieces) {
   const updatedAllAffectedPieces = allAffectedPieces.filter((piece) => {
+    if (!piece) return false;
     if (piece.specialType && piece.shouldRetain) {
       piece.shouldRetain = false
       return false;
@@ -285,7 +286,7 @@ function delay(ms) {
 }
 
 async function animateSpecialPiece(piece) {
-  if (piece.specialType === 'none') return;
+  if (!piece || piece.specialType === 'none') return;
   const [row, col] = piece.position;
   const div = getElement(row, col);
   const specialPieceType = specialPieceTypes.find(type => type.specialType === piece.specialType) || {};
@@ -324,6 +325,7 @@ async function animateSpecialPiece(piece) {
 
 
 async function explodeAnimation(piece, div) {
+  if (!piece) return;
   const explosiveButton = new ExplosiveButton(div);
   if (piece.specialType === 'waitingDoubleBomb') {
     explosiveButton.explode(1500, true);  //larger flag on
@@ -336,6 +338,7 @@ async function explodeAnimation(piece, div) {
 
 async function animateAffectedPieces(affectedPieces) {
   const promises = affectedPieces.map(async (piece) => {
+    if (!piece) return;
     const [row, col] = piece.position;
     const div = getElement(row, col);
     const div2 = div.querySelector('.piece');
@@ -374,7 +377,9 @@ function addAffectedPieces(row, col, condition) {
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
       if (condition(row, col, r, c)) {
-        affectedPieces.push(pieces[r][c]);
+        const piece = pieces[r][c];
+        if (!piece) continue;
+        affectedPieces.push(piece);
       }
     }
   }
@@ -386,6 +391,7 @@ function addAffectedPieces(row, col, condition) {
 //   Update
 //-------------
 function updateSpecialType(piece, newType) {
+  if (!piece) return;
   const [row, col] = piece.position;
   piece.specialType = newType;
   const div = getElement(row, col);
@@ -409,6 +415,7 @@ function findSpecialPiece(specialTypes) {
   for (let row = 0; row < ROWS; row++) {
     for (let col = 0; col < COLS; col++) {
       const piece = pieces[row][col];
+      if (!piece) continue;
       if (specialTypes.includes(piece.specialType)) {
         foundPieces.push(piece);
       }

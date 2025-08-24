@@ -51,6 +51,10 @@ function handleDrop(event) {
   const { moveDistanceX, moveDistanceY } = getMoveDistance(event, target);
   if (moveDistanceX >= PIECE_SIZE || moveDistanceY >= PIECE_SIZE) {
     const piece = pieces[row][col];
+    if (!piece) {
+      resetDragAttributes(target);
+      return;
+    }
     handleDrag(piece, newRow, newCol, row, col);
   }
   resetDragAttributes(target);
@@ -58,10 +62,12 @@ function handleDrop(event) {
 
 function handleDrag(piece, newRow, newCol, oldRow, oldCol) {
   if (isAnimating) return;
+  if (!piece) return;
   if (newRow < 0 || newRow >= ROWS || newCol < 0 || newCol >= COLS) {
     return;
   }
   const newPiece = pieces[newRow][newCol];
+  if (!newPiece) return;
   if (!isAdjacent(piece, newPiece)) {
     return;
   }

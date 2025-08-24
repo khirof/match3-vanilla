@@ -1,11 +1,13 @@
 {
+    "id": "./index.html",
+    "name": "game like candy crush",
+    "short_name": "MatchGame",
+    "description": "Simple match-3 game",
     "theme_color": "#d7dae5",
     "background_color": "#d7dae5",
     "display": "standalone",
-    "scope": "/",
-    "start_url": "/index.html",
-    "name": "game like candy crush",
-    "short_name": "MatchGame",
+    "scope": "./",
+    "start_url": "./index.html",
     "icons": [
         {
             "src": "./assets/images/icons/icon-192x192.png",
