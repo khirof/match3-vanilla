@@ -5,7 +5,7 @@ import { ROWS, COLS, colors, PIECE_SIZE } from "./constants.js";
 import { addPieceToDOM, clearInnerHTML, createDiv, getElement } from "./domManipulation.js";
 import { applySpecialEffect, applySpecialPieceRules, initializeSpecialPieces, addSpecialClass, findSpecialPiece } from "./specialManagement.js";
 import { getMatchingPieces } from "./matchManagement.js";
-import { toggleAnimatingStat, updateScore } from "./utils.js";
+import { toggleAnimatingStat, updateScore, waitForEvent } from "./utils.js";
 import { addDraggableEvents } from "./eventHandlers.js";
 
 
@@ -135,10 +135,11 @@ function moveAndRefill() {
 //-------------
 //  Animate
 //-------------
-function animatePieces(targetPieces, initialYOffsets, onComplete) {
+async function animatePieces(targetPieces, initialYOffsets, onComplete) {
   const fallTimePerCell = 0.125;
-  let piecesToAnimate = targetPieces.length;
-  targetPieces.forEach(({ row, col }, index) => {
+  const delay = 100;
+
+  const animations = targetPieces.map(async ({ row, col }, index) => {
     let piece = pieces[row][col];
     let div = createDiv(row, col)
 
@@ -147,26 +148,28 @@ function animatePieces(targetPieces, initialYOffsets, onComplete) {
     addSpecialClass(div, piece)
 
     div.style.transform = `translate(0px, ${initialYOffsets[index]}px)`;
-    const delay = 100;
+
+    const distance = Math.abs(initialYOffsets[index]);
+    const cellsToFall = distance / PIECE_SIZE;
+    const duration = cellsToFall * fallTimePerCell;
+
+    const endPromise = waitForEvent(div, 'transitionend', Math.max(1000, (duration + 0.2) * 1000));
+
     setTimeout(() => {
-      const distance = Math.abs(initialYOffsets[index]);
-      const cellsToFall = distance / PIECE_SIZE;
-      const duration = cellsToFall * fallTimePerCell;
       div.style.transition = `transform ${duration}s cubic-bezier(0.34, 1.41, 0.4, 0.895)`; //少し行き過ぎる
       // div.style.transition = `transform ${duration}s cubic-bezier(0.55, 0.085, 0.68, 0.53)`; //ease in
       // div.style.transition = `transform ${duration}s linear`;
       div.style.transform = `translate(0px, 0px)`;
     }, delay);
-    div.addEventListener('transitionend', function onTransitionEnd() {
-      div.style.transition = '';
-      div.style.transform = '';
-      div.removeEventListener('transitionend', onTransitionEnd);
-      piecesToAnimate--;
-      if (piecesToAnimate === 0 && onComplete) {
-        onComplete();
-      }
-    });
+
+    await endPromise;
+
+    div.style.transition = '';
+    div.style.transform = '';
   });
+
+  await Promise.all(animations);
+  if (onComplete) onComplete();
 }
 
 

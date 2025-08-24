@@ -246,6 +246,12 @@ async function applySpecialEffect(piecesToCheck, allAffectedPieces, initialNoSpe
         !piecesToCheck.includes(affectedPiece)
     );
     allAffectedPieces = allAffectedPieces.concat(affectedPieces); // 効果範囲合成
+    // 待機ボム系は自身も削除対象に含める（爆発後に盤面から消す）
+    if (piece.specialType === 'waitingBomb' || piece.specialType === 'waitingDoubleBomb') {
+      if (!allAffectedPieces.includes(piece)) {
+        allAffectedPieces = allAffectedPieces.concat([piece]);
+      }
+    }
     nextSpecialPieces.push(...affectedPieces.filter((p) => p.specialType)); // 新しく効果範囲内になった特殊ピース追加
     affectedPiecesThisLoop.push(...affectedPieces.filter((p) => !p.specialType)); // このループで影響を受ける通常ピースを格納
 
