@@ -3,9 +3,9 @@
 //-------------
 import { pieces } from './pieceManagement.js';
 import { addPieceToDOM, getElement } from "./domManipulation.js";
+import { waitForEvent } from './utils.js';
 import { ROWS, COLS } from "./constants.js";
 import { ExplosiveButton } from './explosiveButton.js';
-import { waitForEvent } from './utils.js';
 
 
 //-------------
@@ -232,9 +232,6 @@ async function applySpecialEffect(piecesToCheck, allAffectedPieces, initialNoSpe
 
   if (isInitialEffect) {
     affectedPiecesThisLoop.push(...initialNoSpecialPieces);
-    // if (piecesToCheck.length === 0) { //初回かつ特殊なし→マッチして特殊発動したときもこの処理必要。なぜ特殊なしにした？
-      animationPromises.push(animateAffectedPieces(initialNoSpecialPieces));
-    // }
   }
 
   for (const piece of piecesToCheck) {
@@ -246,17 +243,15 @@ async function applySpecialEffect(piecesToCheck, allAffectedPieces, initialNoSpe
         !piecesToCheck.includes(affectedPiece)
     );
     allAffectedPieces = allAffectedPieces.concat(affectedPieces); // 効果範囲合成
-    // 待機ボム系は自身も削除対象に含める（爆発後に盤面から消す）
-    if (piece.specialType === 'waitingBomb' || piece.specialType === 'waitingDoubleBomb') {
-      if (!allAffectedPieces.includes(piece)) {
-        allAffectedPieces = allAffectedPieces.concat([piece]);
-      }
-    }
     nextSpecialPieces.push(...affectedPieces.filter((p) => p.specialType)); // 新しく効果範囲内になった特殊ピース追加
     affectedPiecesThisLoop.push(...affectedPieces.filter((p) => !p.specialType)); // このループで影響を受ける通常ピースを格納
 
     animationPromises.push(animateSpecialPiece(piece));
-    animationPromises.push(animateAffectedPieces(affectedPiecesThisLoop));
+  }
+  // このループで影響を受けた通常ピースをユニーク化し、1回だけアニメーション実行
+  const uniqueAffectedPiecesThisLoop = [...new Set(affectedPiecesThisLoop)];
+  if (uniqueAffectedPiecesThisLoop.length > 0) {
+    animationPromises.push(animateAffectedPieces(uniqueAffectedPiecesThisLoop));
   }
   await Promise.all(animationPromises);
 
@@ -289,12 +284,10 @@ function delay(ms) {
 }
 
 async function animateSpecialPiece(piece) {
-  if (piece.specialType === 'none') {
-    return;
-  }
+  if (piece.specialType === 'none') return;
   const [row, col] = piece.position;
-  let div = getElement(row, col);
-  const specialPieceType = specialPieceTypes.find(type => type.specialType === piece.specialType);
+  const div = getElement(row, col);
+  const specialPieceType = specialPieceTypes.find(type => type.specialType === piece.specialType) || {};
   const animationClass = specialPieceType.animationClass;
 
   if (piece.specialType === 'waitingBomb' || piece.specialType === 'waitingDoubleBomb') {
@@ -310,12 +303,11 @@ async function animateSpecialPiece(piece) {
   // スタイルの再計算を強制
   void div.offsetWidth;
 
-  // 先に待機をセットしてからアニメ開始
-  const endPromise = waitForEvent(div, 'animationend', 3000);
+  // 開始前にリスナーを登録してからアニメーションを付与
   div.classList.add(animationClass);
-  await endPromise;
+  await waitForEvent(div, 'animationend', 1500);
 
-  // 後処理
+  // cleanup / state updates
   div.classList.remove(animationClass);
   if (piece.specialType === 'bomb' || piece.specialType === 'horizontalBomb' || piece.specialType === 'verticalBomb') {
     updateSpecialType(piece, 'waitingBomb');
@@ -325,56 +317,24 @@ async function animateSpecialPiece(piece) {
     piece.shouldRetain = true;
   } else if (!piece.shouldRetain) {
     piece.shouldRetain = false;
-    div.classList.add("hide");
+    div.classList.add('hide');
   }
 }
 
 
 async function explodeAnimation(piece, div) {
   const explosiveButton = new ExplosiveButton(div);
-  const durationMs = 1500;
   if (piece.specialType === 'waitingDoubleBomb') {
-    explosiveButton.explode(durationMs, true);  //larger flag on
+    explosiveButton.explode(1500, true);  //larger flag on
   } else {
-    explosiveButton.explode(durationMs);
+    explosiveButton.explode(1500);
   }
-  await waitForExplosionComplete(div, durationMs);
+  await delay(1000);
   div.style.opacity = 0;  //waitingBomb はCSSフェードアウトさせてないのでここで強制0。本当は、描画を分けて最初に0にしたい（タイミングミスるとおかしくなる
 }
 
-function waitForExplosionComplete(container, fallbackMs = 1500) {
-  return new Promise((resolve) => {
-    let settled = false;
-    let observer;
-
-    const finish = () => {
-      if (settled) return;
-      settled = true;
-      if (observer) observer.disconnect();
-      resolve();
-    };
-
-    // 既にパーティクルが存在しない場合は次フレームで解決
-    if (!container.querySelector('.particle')) {
-      requestAnimationFrame(finish);
-      return;
-    }
-
-    // パーティクルが全て消えるまで監視
-    observer = new MutationObserver(() => {
-      if (!container.querySelector('.particle')) {
-        finish();
-      }
-    });
-    observer.observe(container, { childList: true, subtree: true });
-
-    // フォールバック（想定より長く続いた場合でも解決）
-    setTimeout(finish, fallbackMs + 500);
-  });
-}
-
 async function animateAffectedPieces(affectedPieces) {
-  const animationPromises = affectedPieces.map(async (piece) => {
+  const promises = affectedPieces.map(async (piece) => {
     const [row, col] = piece.position;
     const div = getElement(row, col);
     const div2 = div.querySelector('.piece');
@@ -382,18 +342,17 @@ async function animateAffectedPieces(affectedPieces) {
     // スタイルの再計算を強制
     void div2.offsetWidth;
 
-    // 先に待機をセットしてからアニメ開始
-    const endPromise = waitForEvent(div2, 'animationend', 3000);
+    // 開始してからイベントを待つ
     div.classList.add('bubble');
     div2.classList.add('scale-out');
-    await endPromise;
+    await waitForEvent(div2, 'animationend', 1000);
 
-    // 後処理
     div.classList.remove('bubble');
     div2.classList.remove('scale-out');
-    div.classList.add("hide");
+    div.classList.add('hide');
   });
-  await Promise.all(animationPromises);
+
+  await Promise.all(promises);
 }
 
 
