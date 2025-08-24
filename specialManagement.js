@@ -26,6 +26,7 @@ export {
 //-------------
 const specialPieceTypes = [];
 function initializeSpecialPieces() {
+  if (specialPieceTypes.length) return;
   specialPieceTypes.push(
     {
       specialType: 'bomb',
@@ -248,7 +249,7 @@ async function applySpecialEffect(piecesToCheck, allAffectedPieces, initialNoSpe
 
     animationPromises.push(animateSpecialPiece(piece));
   }
-  // このループで影響を受けた通常ピースをユニーク化し、1回だけアニメーション実行
+  // このループで影響を受けるピースをユニーク化し、1回だけアニメーション実行
   const uniqueAffectedPiecesThisLoop = [...new Set(affectedPiecesThisLoop)];
   if (uniqueAffectedPiecesThisLoop.length > 0) {
     animationPromises.push(animateAffectedPieces(uniqueAffectedPiecesThisLoop));
@@ -393,8 +394,11 @@ function updateSpecialType(piece, newType) {
 }
 
 function updateSpecialClass(div, piece) {
-  div.classList.remove('special', 'bomb', 'horizontalStripe', 'verticalStripe', 'doubleBomb', 'horizontalBomb', 'verticalBomb');
-  div.classList.add('special', piece.specialType);
+  const allSpecialClasses = ['special', ...specialPieceTypes.map(t => t.specialType)];
+  div.classList.remove(...allSpecialClasses);
+  if (piece.specialType && piece.specialType !== 'none') {
+    div.classList.add('special', piece.specialType);
+  }
 }
 
 //-------------
