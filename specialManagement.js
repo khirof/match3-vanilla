@@ -189,13 +189,19 @@ async function addSpecialPiece(piece, specialPiece) {
   const [row, col] = piece.position;
   specialPiece.position = [row, col];
   pieces[row][col] = specialPiece;
-  const div = getElement(row, col);
 
-  // ラッパーにアニメーションを付与（.piece はいじらない）
+  const div = getElement(row, col);
+  const div2 = div.querySelector('.piece');
+
+  // 生成アニメ中はNULL見た目（不可視）
+  div2.style.opacity = 0;
+  div2.style.visibility = 'hidden';
+
+  // ラッパーに生成アニメを付与
   div.classList.add('create');
 
-  // アニメーション終了を待機
-  const animationEndPromise = new Promise((resolve) => {
+  // 生成アニメの終了を待機
+  await new Promise((resolve) => {
     const handler = (event) => {
       if (event.target === div) {
         div.removeEventListener('animationend', handler);
@@ -205,11 +211,13 @@ async function addSpecialPiece(piece, specialPiece) {
     div.addEventListener('animationend', handler);
   });
 
-  await animationEndPromise;
-
-  // アニメーション終了後にクラスを外し、特殊ピースを反映
-  div.classList.remove('create');
+  // アニメ終了後に特殊ピースの見た目へ切り替え＆可視化
   addPieceToDOM(specialPiece);
+  div2.style.visibility = '';
+  div2.style.opacity = '';
+
+  // 後処理
+  div.classList.remove('create');
 }
 
 function addSpecialClass(div, piece) {
