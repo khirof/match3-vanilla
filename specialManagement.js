@@ -342,13 +342,22 @@ async function animateSpecialPiece(piece) {
 async function explodeAnimation(piece, div) {
   if (!piece) return;
   const explosiveButton = new ExplosiveButton(div);
+
+  // inner piece（ボディ）だけを即座に非表示にする（粒子は親要素に追加されるので影響しない）
+  const pieceDiv = div.querySelector('.piece');
+  if (pieceDiv) {
+    pieceDiv.style.opacity = 0;
+    pieceDiv.style.visibility = 'hidden';
+  }
+
   if (piece.specialType === 'waitingDoubleBomb') {
-    explosiveButton.explode(1500, true);  //larger flag on
+    explosiveButton.explode(1500, true);  // larger flag on
   } else {
     explosiveButton.explode(1500);
   }
-  await delay(1000);
-  div.style.opacity = 0;  //waitingBomb はCSSフェードアウトさせてないのでここで強制0。本当は、描画を分けて最初に0にしたい（タイミングミスるとおかしくなる
+
+  // 粒子が発生するのを少し待つが、長い待機はしない（見た目の余韻は残るが処理は先に進む）
+  await delay(150);
 }
 
 async function animateAffectedPieces(affectedPieces) {
