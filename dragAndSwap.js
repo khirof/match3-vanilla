@@ -76,17 +76,17 @@ function handleDrag(piece, newRow, newCol, oldRow, oldCol) {
   const newPieceMatches = getMatchingPieces(newPiece);
   let combinedMatches = [];
   if (pieceMatches.length > 0 || newPieceMatches.length > 0 || piece.specialType || newPiece.specialType) {
-      animateSwap(piece, newPiece, () => {
+      animateSwap(piece, newPiece, async () => {
         if (piece.specialType && newPiece.specialType) {  //起点座標はdrag先=piece(swap済なので)
           applySpecialMix(piece, newPiece);
         }
-        combinedMatches = applySpecialPieceRules([pieceMatches, newPieceMatches], [piece, newPiece]);
+        combinedMatches = await applySpecialPieceRules([pieceMatches, newPieceMatches], [piece, newPiece]);
         [piece, newPiece].forEach((p) => {
           if (p.specialType) {
             combinedMatches.push(p);
           }
         });
-        removePieces(combinedMatches);
+        await removePieces(combinedMatches);
       });
   } else {
     swapPieces(piece, newPiece);

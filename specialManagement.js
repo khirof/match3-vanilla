@@ -17,7 +17,8 @@ export {
   addSpecialClass,
   applySpecialPieceRules,
   applySpecialMix,
-  findSpecialPiece
+  findSpecialPiece,
+  waitForSpecialCreations
 };
 
 
@@ -25,6 +26,11 @@ export {
 //  Constants
 //-------------
 const specialPieceTypes = [];
+const creationPromises = [];
+function waitForSpecialCreations() {
+  const pending = creationPromises.splice(0, creationPromises.length);
+  return Promise.all(pending);
+}
 function initializeSpecialPieces() {
   if (specialPieceTypes.length) return;
   specialPieceTypes.push(
@@ -134,7 +140,7 @@ function getSpecialPieceType(specialPiece) {
 //-------------
 //    Add
 //-------------
-function applySpecialPieceRules(matches, swapedPieces = null) {
+async function applySpecialPieceRules(matches, swapedPieces = null) {
   const uniqueMatches = swapedPieces ? matches : combineOverlappingMatches(matches);
   const specialPieceCoords = swapedPieces
     ? swapedPieces.filter(Boolean).map((piece) => ({
@@ -142,32 +148,31 @@ function applySpecialPieceRules(matches, swapedPieces = null) {
       col: piece.position[1]
     }))
     : uniqueMatches.map(getSpecialPieceCoord);
-  const updatedMatches = specialPieceCoords.map((coord, index) => {
+  const updatedMatches = await Promise.all(specialPieceCoords.map(async (coord, index) => {
     const piece = pieces[coord.row][coord.col];
-    return piece ? checkAndAddSpecial(piece, uniqueMatches[index]) : uniqueMatches[index];
-  });
+    return piece ? await checkAndAddSpecial(piece, uniqueMatches[index]) : uniqueMatches[index];
+  }));
   return updatedMatches.flat();
 }
 
-function checkAndAddSpecial(piece, match) {
+async function checkAndAddSpecial(piece, match) {
   const specialPiece = generateSpecialPiece(match);
   if (specialPiece) {
-    // ピースを特殊ピースに変更
-    addSpecialPiece(piece, specialPiece);
-    
+    // ピースを特殊ピースに変更（開始だけして待たない）
+    const p = addSpecialPiece(piece, specialPiece);
+    creationPromises.push(p);
+
     // match の中に特殊ピースの情報を更新
     const specialPieceIndex = match.findIndex(p => p.row === piece.position[0] && p.col === piece.position[1]);
     if (specialPieceIndex !== -1) {
-      // match 内の該当するピース情報を特殊ピース情報に変更
       match[specialPieceIndex].special = specialPiece;
     }
 
-    // match から元のピースを削除（もしくは別の方法で処理する）
+    // match から元のピースを削除
     removePieceFromMatches(piece, match);
   }
   return match;
 }
-
 
 function generateSpecialPiece(matchingPieces) {
   const matchCount = matchingPieces.length;
@@ -213,8 +218,12 @@ async function addSpecialPiece(piece, specialPiece) {
 
   // アニメ終了後に特殊ピースの見た目へ切り替え＆可視化
   addPieceToDOM(specialPiece);
-  div2.style.visibility = '';
-  div2.style.opacity = '';
+  // 念のため最新の .piece を取り直してインラインスタイルを解除
+  const latestInner = div.querySelector('.piece');
+  if (latestInner) {
+    latestInner.style.removeProperty('visibility');
+    latestInner.style.removeProperty('opacity');
+  }
 
   // 後処理
   div.classList.remove('create');

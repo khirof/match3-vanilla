@@ -3,7 +3,7 @@
 //-------------
 import { ROWS, COLS, colors, PIECE_SIZE } from "./constants.js";
 import { addPieceToDOM, clearInnerHTML, createDiv, getElement } from "./domManipulation.js";
-import { applySpecialEffect, applySpecialPieceRules, initializeSpecialPieces, addSpecialClass, findSpecialPiece } from "./specialManagement.js";
+import { applySpecialEffect, applySpecialPieceRules, initializeSpecialPieces, addSpecialClass, findSpecialPiece, waitForSpecialCreations } from "./specialManagement.js";
 import { getMatchingPieces } from "./matchManagement.js";
 import { toggleAnimatingStat, updateScore, waitForEvent } from "./utils.js";
 import { addDraggableEvents } from "./eventHandlers.js";
@@ -51,27 +51,31 @@ async function removePieces(matches) {
 
   const specialPieces = matches.filter((piece) => piece.specialType);
   const nonSpecialPieces = matches.filter((piece) => !piece.specialType);
-  const allAffectedPieces = await applySpecialEffect(specialPieces, specialPieces, nonSpecialPieces, true);   //初回特殊ピースの2重処理を避けるため、最初の特殊ピースは処理済(影響範囲考慮済)で渡す。
-  const uniqueAffectedPieces = [...new Set(allAffectedPieces.concat(nonSpecialPieces))] ; 
+  const allAffectedPieces = await applySpecialEffect(specialPieces, specialPieces, nonSpecialPieces, true);
+  const uniqueAffectedPieces = [...new Set(allAffectedPieces.concat(nonSpecialPieces))] ;
 
-    uniqueAffectedPieces.forEach((piece) => {
-      if (!piece) return;
-      const [row, col] = piece.position;
-      if (pieces[row]) {
-        pieces[row][col] = null;
-        clearInnerHTML(row, col)
-      }
-    });
-    // 次ループに進む直前で連鎖カウントを増やす
-    chainCount++;
-    moveAndRefill();
+  uniqueAffectedPieces.forEach((piece) => {
+    if (!piece) return;
+    const [row, col] = piece.position;
+    if (pieces[row]) {
+      pieces[row][col] = null;
+      clearInnerHTML(row, col)
+    }
+  });
+
+  // ここで特殊生成アニメの完了を待つ（削除と並行で動いていたものを落下前に合流）
+  await waitForSpecialCreations();
+
+  // 次ループに進む直前で連鎖カウントを増やす
+  chainCount++;
+  moveAndRefill();
 }
 
 
 //-------------
 //  Move
 //-------------
-function removeAndRefillMatches() {
+async function removeAndRefillMatches() {
   //マッチ有無チェック。あれば格納
   const allMatches = [];
   for (let row = 0; row < ROWS; row++) {
@@ -88,14 +92,14 @@ function removeAndRefillMatches() {
   //削除対象セット
   let piecesToRemove = [];
   if (allMatches.length > 0) {  //マッチ有なら特殊ピース生成して削除処理に進む
-    piecesToRemove = applySpecialPieceRules(allMatches);
+    piecesToRemove = await applySpecialPieceRules(allMatches);
   } else {  //マッチがない場合のみ、待機中ピースを起動(waitingBomb系)
     piecesToRemove = findSpecialPiece(['waitingBomb', 'waitingDoubleBomb']);
   }
 
   //削除対象があれば次のループへ。なければ削除再帰終了。
   if (piecesToRemove.length > 0) {
-    removePieces(piecesToRemove);
+    await removePieces(piecesToRemove);
   } else {  //ここがピース削除連鎖の再帰処理ラスト。
     toggleAnimatingStat(false);
     chainCount = 1;
@@ -130,8 +134,8 @@ function moveAndRefill() {
       yOffsetOffset -= PIECE_SIZE;
     }
   }
-  animatePieces(targetPieces, initialYOffsets, () => {
-    removeAndRefillMatches();
+  animatePieces(targetPieces, initialYOffsets, async () => {
+    await removeAndRefillMatches();
   });
 }
 
