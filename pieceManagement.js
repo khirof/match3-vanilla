@@ -46,7 +46,8 @@ function addPiece(pieces, row, col) {
 //-------------
 async function removePieces(matches) {
   toggleAnimatingStat(true);
-  updateScore(matches, chainCount);
+  const currentChain = chainCount; // 固定化してスコア計算のズレを防止
+  updateScore(matches, currentChain);
 
   const specialPieces = matches.filter((piece) => piece.specialType);
   const nonSpecialPieces = matches.filter((piece) => !piece.specialType);
@@ -61,6 +62,8 @@ async function removePieces(matches) {
         clearInnerHTML(row, col)
       }
     });
+    // 次ループに進む直前で連鎖カウントを増やす
+    chainCount++;
     moveAndRefill();
 }
 
@@ -69,7 +72,6 @@ async function removePieces(matches) {
 //  Move
 //-------------
 function removeAndRefillMatches() {
-  chainCount++;
   //マッチ有無チェック。あれば格納
   const allMatches = [];
   for (let row = 0; row < ROWS; row++) {
