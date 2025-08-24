@@ -235,22 +235,31 @@ async function applySpecialEffect(piecesToCheck, allAffectedPieces, initialNoSpe
     affectedPiecesThisLoop.push(...initialNoSpecialPieces);
   }
 
+  // row-col キーでの包含・重複判定に切替
+  const allAffectedKeySet = new Set(allAffectedPieces.filter(Boolean).map(getPieceKey));
+  const piecesToCheckKeySet = new Set(piecesToCheck.filter(Boolean).map(getPieceKey));
+
   for (const piece of piecesToCheck.filter(Boolean)) {
     const [row, col] = piece.position;
     let affectedPieces = specialAffectedPieces(piece); // 効果範囲算出
-    affectedPieces = affectedPieces.filter(   // 効果範囲重複排除
-      (affectedPiece) =>
-        !allAffectedPieces.includes(affectedPiece) &&
-        !piecesToCheck.includes(affectedPiece)
-    );
+    // 効果範囲重複排除（参照同一性ではなく座標キーで判定）
+    affectedPieces = affectedPieces.filter((affectedPiece) => {
+      const key = getPieceKey(affectedPiece);
+      return key && !allAffectedKeySet.has(key) && !piecesToCheckKeySet.has(key);
+    });
     allAffectedPieces = allAffectedPieces.concat(affectedPieces); // 効果範囲合成
+    // Set も更新
+    affectedPieces.forEach((p) => {
+      const key = getPieceKey(p);
+      if (key) allAffectedKeySet.add(key);
+    });
     nextSpecialPieces.push(...affectedPieces.filter((p) => p.specialType)); // 新しく効果範囲内になった特殊ピース追加
     affectedPiecesThisLoop.push(...affectedPieces.filter((p) => !p.specialType)); // このループで影響を受ける通常ピースを格納
 
     animationPromises.push(animateSpecialPiece(piece));
   }
   // このループで影響を受けるピースをユニーク化し、1回だけアニメーション実行
-  const uniqueAffectedPiecesThisLoop = [...new Set(affectedPiecesThisLoop)];
+  const uniqueAffectedPiecesThisLoop = uniqueByKey(affectedPiecesThisLoop);
   if (uniqueAffectedPiecesThisLoop.length > 0) {
     animationPromises.push(animateAffectedPieces(uniqueAffectedPiecesThisLoop));
   }
@@ -540,4 +549,24 @@ function removePieceFromMatches(piece, matches) {
   }
 }
 
+
+// 参照同一性に依存しないための共通ユーティリティ
+function getPieceKey(piece) {
+  if (!piece || !piece.position) return '';
+  const [r, c] = piece.position;
+  return `${r}-${c}`;
+}
+
+function uniqueByKey(piecesArray) {
+  const seen = new Set();
+  const result = [];
+  for (const p of piecesArray) {
+    if (!p) continue;
+    const key = getPieceKey(p);
+    if (!key || seen.has(key)) continue;
+    seen.add(key);
+    result.push(p);
+  }
+  return result;
+}
 
