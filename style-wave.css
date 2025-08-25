@@ -16,7 +16,7 @@
   letter-spacing: 5px;
   font-family: var(--font-family);
   background: linear-gradient(145deg, var(--wave-grad-start), var(--wave-grad-end));
-  background-color: var(--wave-main-col);
+  background-color: transparent;
 
   border-radius: 12px;
   /* color:var(--base-color); */
@@ -29,25 +29,80 @@
     ;
   /* 片側を強く・片側を少し弱く。blur は offset の約2倍 */
   box-shadow:
-    14px 14px 28px var(--wave-shadow-dark),   /* シャドウ（右下） */
-    -12px -12px 24px var(--wave-shadow-light); /* ハイライト（左上） */
+    12px 12px 24px var(--wave-shadow-dark),   /* シャドウ（右下） */
+    -10px -10px 20px var(--wave-shadow-light); /* ハイライト（左上） */
   z-index: 5;
 }
 
 .wave:hover {
   color:var(--base-color); 
   text-shadow: -1px -1px 0 var(--purewhite-color), 1px 1px 0 var(--textshadow-color);
-  background-color: var(--red-color);
-    18px 18px 36px rgba(134,136,144,0.50),
-    -16px -16px 30px rgba(255,255,255,0.96);
+  box-shadow:
+    12px 12px 24px var(--wave-shadow-dark),
+    -10px -10px 20px var(--wave-shadow-light);
+}
+
+/* Hover background only when not pressed */
+.wave:hover:not(:active):not(.clicked) {
+  background-color: var(--wave-main-col);
 }
 
 .wave.clicked {
+  background: var(--base-color);
+  background-color: var(--base-color);
   box-shadow:
-    8px 8px 16px rgba(134,136,144,0.40),
-    -7px -7px 14px rgba(255,255,255,0.90);
+    inset 4px 4px 8px var(--wave-shadow-dark),
+    inset -3px -3px 6px var(--wave-shadow-light);
+  transition: 
+    box-shadow 0.2s ease,
+    background-color 0s linear,
+    text-shadow 0.6s ease,
+    color 0.4s ease
+    ;
   width: 297px;
   height:69px;
+}
+
+/* Overlay inner-shadow above wave graphics, below text */
+.wave::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow:
+    inset 4px 4px 8px var(--wave-shadow-dark),
+    inset -3px -3px 6px var(--wave-shadow-light);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.wave.clicked::after {
+  opacity: 1;
+}
+
+/* Fallback: show press effect without JS */
+.wave:active {
+  background: var(--base-color);
+  background-color: var(--base-color);
+  box-shadow:
+    inset 4px 4px 8px var(--wave-shadow-dark),
+    inset -3px -3px 6px var(--wave-shadow-light);
+  transition: 
+    box-shadow 0.2s ease,
+    background-color 0s linear,
+    text-shadow 0.6s ease,
+    color 0.4s ease
+    ;
+}
+.wave:active::after {
+  opacity: 1;
+}
+
+/* Ensure label text stays above overlay */
+.wave .text {
+  z-index: 2;
 }
 
 .wave i {
@@ -67,6 +122,13 @@
     transform 0.4s linear, 
     top 1s linear;
   overflow: hidden;
+}
+
+/* Dim the rotating shape while pressed so inset reads clearly */
+.wave.clicked i,
+.wave:active i {
+  opacity: 0.45;
+  filter: brightness(0.9);
 }
 
 .wave i:before,

@@ -38,7 +38,7 @@
   --wave-grad-start: rgba(194,196,206,1);
   --wave-grad-end: rgba(230,233,245,1);
   --wave-text-color: rgba(255,255,255,0.47);
-  --wave-shadow-dark: rgba(134,136,144,0.45);
+  --wave-shadow-dark: rgba(134,136,144,0.95);
   --wave-shadow-light: rgba(255,255,255,0.92);
 
 }
