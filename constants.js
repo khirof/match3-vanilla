@@ -10,7 +10,7 @@ const ROWS = 9;
 const COLS = 9;
 const PIECE_SIZE = 70;
 const colors = ['red', 'blue', 'green', 'yellow', 'purple'];
-const FALL_START_DELAY_MS = 80; // 演出ディレイ（落下開始直前）
+const FALL_START_DELAY_MS = 100; // 演出ディレイ（落下開始直前）
 
 
 // const colors = ['red', 'blue', 'green'];
