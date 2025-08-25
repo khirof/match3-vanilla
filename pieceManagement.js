@@ -1,7 +1,7 @@
 //-------------
 //  import
 //-------------
-import { ROWS, COLS, colors, PIECE_SIZE } from "./constants.js";
+import { ROWS, COLS, colors, PIECE_SIZE, FALL_START_DELAY_MS } from "./constants.js";
 import { addPieceToDOM, clearInnerHTML, createDiv, getElement } from "./domManipulation.js";
 import { applySpecialEffect, applySpecialPieceRules, initializeSpecialPieces, addSpecialClass, findSpecialPiece, waitForSpecialCreations } from "./specialManagement.js";
 import { getMatchingPieces } from "./matchManagement.js";
@@ -145,7 +145,7 @@ function moveAndRefill() {
 //-------------
 async function animatePieces(targetPieces, initialYOffsets, onComplete) {
   const fallTimePerCell = 0.125;
-  const delay = 100;
+  const startDelayMs = FALL_START_DELAY_MS; // 演出ディレイ（開始直前）
 
   const animations = targetPieces.map(async ({ row, col }, index) => {
     let piece = pieces[row][col];
@@ -158,25 +158,32 @@ async function animatePieces(targetPieces, initialYOffsets, onComplete) {
     }
     addSpecialClass(div, piece)
 
-    div.style.transform = `translate(0px, ${initialYOffsets[index]}px)`;
+    div.style.transform = `translate3d(0px, ${initialYOffsets[index]}px, 0)`;
+    div.style.willChange = 'transform';
 
     const distance = Math.abs(initialYOffsets[index]);
     const cellsToFall = distance / PIECE_SIZE;
     const duration = cellsToFall * fallTimePerCell;
 
-    const endPromise = waitForEvent(div, 'transitionend', Math.max(1000, (duration + 0.2) * 1000));
+    const endPromise = waitForEvent(div, 'transitionend', Math.max(1000, (duration + (startDelayMs / 1000) + 0.2) * 1000));
 
-    setTimeout(() => {
-      div.style.transition = `transform ${duration}s cubic-bezier(0.34, 1.41, 0.4, 0.895)`; //少し行き過ぎる
-      // div.style.transition = `transform ${duration}s cubic-bezier(0.55, 0.085, 0.68, 0.53)`; //ease in
-      // div.style.transition = `transform ${duration}s linear`;
-      div.style.transform = `translate(0px, 0px)`;
-    }, delay);
+    await new Promise((resolve) => {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          div.style.transition = `transform ${duration}s cubic-bezier(0.34, 1.41, 0.4, 0.895) ${startDelayMs}ms`; //少し行き過ぎる
+          // div.style.transition = `transform ${duration}s cubic-bezier(0.55, 0.085, 0.68, 0.53)`; //ease in
+          // div.style.transition = `transform ${duration}s linear`;
+          div.style.transform = `translate3d(0px, 0px, 0)`;
+          resolve();
+        });
+      });
+    });
 
     await endPromise;
 
     div.style.transition = '';
     div.style.transform = '';
+    div.style.willChange = '';
   });
 
   await Promise.all(animations);
