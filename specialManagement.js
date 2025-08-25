@@ -3,7 +3,7 @@
 //-------------
 import { pieces } from './pieceManagement.js';
 import { addPieceToDOM, getElement } from "./domManipulation.js";
-import { waitForEvent } from './utils.js';
+import { waitForEvent } from './events.js';
 import { ROWS, COLS } from "./constants.js";
 import { ExplosiveButton } from './explosiveButton.js';
 

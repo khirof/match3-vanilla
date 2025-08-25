@@ -2,10 +2,10 @@
 //  import
 //-------------
 import { PIECE_SIZE } from './constants.js';
-import { isAnimating } from './utils.js';
+import { isAnimating } from './state.js';
 import { table } from './domManipulation.js';
 import { pieces } from './pieceManagement.js';
-import { handleDrop, handleDrag } from './dragAndSwap.js'
+import { handleDrop, handleDrag, resetDragAttributes } from './dragAndSwap.js'
 
 //-------------
 //  export
@@ -56,19 +56,15 @@ function onEnd(event) {
   if (Math.abs(dx) >= PIECE_SIZE / 2 || Math.abs(dy) >= PIECE_SIZE / 2) {
     handleDrop(event);
   } else {
-    resetTransform(target);
+    resetDragAttributes(target);
   }
 }
 
 function onDragLeave(event) {
-  resetTransform(event.target);
+  resetDragAttributes(event.target);
 }
 
-function resetTransform(target) {
-  target.style.transform = 'translate(0px, 0px)';
-  target.removeAttribute('data-x');
-  target.removeAttribute('data-y');
-}
+// reset is centralized in dragAndSwap.js as resetDragAttributes
 
 
 //-------------
@@ -103,13 +99,8 @@ function addSwipeEvents() {
         const newCol = col + Math.round(diffX / PIECE_SIZE);
         const piece = pieces[row][col];
         if (!piece) return;
-        handleDrag(piece, newRow, newCol, () => {
-          target.style.transform = 'translate(0px, 0px)';
-          target.removeAttribute('data-x');
-          target.removeAttribute('data-y');
-          target.removeAttribute('data-start-x');
-          target.removeAttribute('data-start-y');
-        });
+        handleDrag(piece, newRow, newCol, row, col);
+        resetDragAttributes(target);
       }
     }
   });

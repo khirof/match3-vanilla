@@ -5,7 +5,9 @@ import { ROWS, COLS, colors, PIECE_SIZE, FALL_START_DELAY_MS } from "./constants
 import { addPieceToDOM, clearInnerHTML, createDiv, getElement } from "./domManipulation.js";
 import { applySpecialEffect, applySpecialPieceRules, initializeSpecialPieces, addSpecialClass, findSpecialPiece, waitForSpecialCreations } from "./specialManagement.js";
 import { getMatchingPieces } from "./matchManagement.js";
-import { toggleAnimatingStat, updateScore, waitForEvent } from "./utils.js";
+import { toggleAnimatingStat } from './controls.js';
+import { updateScore } from './score.js';
+import { waitForEvent } from './events.js';
 import { addDraggableEvents } from "./eventHandlers.js";
 
 

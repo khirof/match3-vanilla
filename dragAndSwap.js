@@ -2,7 +2,7 @@
 //  import
 //-------------
 import { getElement } from "./domManipulation.js";
-import { isAnimating } from './utils.js';
+import { isAnimating } from './state.js';
 import { pieces, removePieces } from './pieceManagement.js';
 import { ROWS, COLS, PIECE_SIZE } from "./constants.js";
 import { getMatchingPieces } from "./matchManagement.js";
@@ -14,7 +14,8 @@ import { applySpecialPieceRules, applySpecialMix } from "./specialManagement.js"
 //-------------
 export {
   handleDrop,
-  handleDrag
+  handleDrag,
+  resetDragAttributes
 };
 
 
