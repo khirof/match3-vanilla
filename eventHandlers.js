@@ -2,7 +2,7 @@
 //  import
 //-------------
 import { PIECE_SIZE } from './constants.js';
-import { isAnimating } from './state.js';
+import { isInputLocked } from './state.js';
 import { table } from './domManipulation.js';
 import { pieces } from './pieceManagement.js';
 import { handleDrop, handleDrag, resetDragAttributes } from './dragAndSwap.js'
@@ -36,7 +36,7 @@ function onStart(event) {
 }
 
 function onMove(event) {
-  if (isAnimating) return;
+  if (isInputLocked()) return;
   const target = event.target;
   const dx = (parseFloat(target.dataset.x) || 0) + event.dx;
   const dy = (parseFloat(target.dataset.y) || 0) + event.dy;
@@ -49,7 +49,7 @@ function onMove(event) {
 }
 
 function onEnd(event) {
-  if (isAnimating) return;
+  if (isInputLocked()) return;
   const target = event.target;
   const dx = parseFloat(target.dataset.x) || 0;
   const dy = parseFloat(target.dataset.y) || 0;
@@ -74,7 +74,7 @@ function addSwipeEvents() {
   let startX, startY;
 
   table.addEventListener('touchstart', (event) => {
-    if (isAnimating) return;
+    if (isInputLocked()) return;
     startX = event.touches[0].clientX;
     startY = event.touches[0].clientY;
   });
@@ -84,7 +84,7 @@ function addSwipeEvents() {
   });
 
   table.addEventListener('touchend', (event) => {
-    if (isAnimating) return;
+    if (isInputLocked()) return;
     const endX = event.changedTouches[0].clientX;
     const endY = event.changedTouches[0].clientY;
     const diffX = endX - startX;

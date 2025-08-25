@@ -2,7 +2,7 @@
 //  import
 //-------------
 import { getElement } from "./domManipulation.js";
-import { isAnimating } from './state.js';
+import { isInputLocked } from './state.js';
 import { pieces, removePieces } from './pieceManagement.js';
 import { ROWS, COLS, PIECE_SIZE } from "./constants.js";
 import { getMatchingPieces } from "./matchManagement.js";
@@ -62,7 +62,7 @@ function handleDrop(event) {
 }
 
 function handleDrag(piece, newRow, newCol, oldRow, oldCol) {
-  if (isAnimating) return;
+  if (isInputLocked()) return;
   if (!piece) return;
   if (newRow < 0 || newRow >= ROWS || newCol < 0 || newCol >= COLS) {
     return;

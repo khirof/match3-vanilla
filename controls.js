@@ -2,7 +2,7 @@
 //  Controls: button, game start/over, and animation toggle
 //-------------
 
-import { isAnimating, setAnimating } from './state.js';
+import { isInputLocked, setAnimating } from './state.js';
 import { toggleAnimatedText, resetAnimatedText } from './animatedText.js';
 import { toggleTimeBar, setOnTimeOver } from './timer.js';
 import { resetOverlayAnimation, resetSpanAnimations, playOverlayAnimation, onOverlayClick } from './overlay.js';
@@ -14,7 +14,7 @@ export { toggleAnimatingStat, gameStart, gameOver };
 
 const button = document.querySelector('button');
 button.addEventListener('mousedown', () => {
-  if (!isAnimating) {
+  if (!isInputLocked()) {
     button.classList.add('clicked');
   }
 });
@@ -27,7 +27,7 @@ function toggleAnimatingStat(bool) {
 }
 
 function gameStart() {
-  if (!isAnimating) {
+  if (!isInputLocked()) {
     button.classList.remove('clicked');
     resetOverlayAnimation();
     resetSpanAnimations();

@@ -5,30 +5,20 @@
 /****************************************************/
 :root {
   --base-color: #d7dae5;
-  /* --red-color: #E6AFC3;
-  --yellow-color: #FEEEB9;
-  --green-color: #C5D9AB;
-  --blue-color: #FFCC9C;
-  --purple-color: #C1C1DE; */
+  --base-color-rgb: 215,218,229;
 
-  /* --red-color: #d599af; */
+  /* Primary palette (original values) */
   --red-color: #fa4b8a;
-  /* --yellow-color: #edd8a4; */
   --yellow-color: #ffa30d;
-  --green-color: #99fb47;
+  --green-color: #6ec25a;
   --blue-color: #0da7fd;
-  --purple-color: #c34ef9;  
-
-  /* --red-color: #dc9db6;
-  --yellow-color: #f6e4ac;
-  --green-color: #bac99f;
-  --blue-color: #ffbf94;
-  --purple-color: #b8b8d0; */
+  --purple-color: #c34ef9;
 
   --shadow-color1: #868890;
+  --shadow-color1-rgb: 134,136,144;
   --highlight-color1: #f3f3f3;
+  --highlight-color1-rgb: 243,243,243;
   --shadow-color2: #a7a9b3;
-  --highlight-color2: #f7fbff;
   --purewhite-color: #ffffff;
   --textshadow-color: #666870;
   --table-top-margin: 100px;
@@ -41,19 +31,16 @@
   --match-font-size: 48px;
   --match-letter-space: 20px;
   --match-ani-interval: 1s;
-  --button-top-margin: 830px;
-  --button-width: 200px;
-  --button-height: 70px;
-  --button-font-size: 36px;
-  --button-radius: 50px;
-  --button-letter-space: 3px;
   --font-family: Roboto, Arial, Sans-serif;
   --wave-main-col: #4973ff66;
-  --stripe-shadow: #66666666;
-  --stripe-highlight: #eeeeeebb;
-  --piece-body-shadow:#88888833 ;
-  --piece-body-highlight:#eeeeeeee ;
-  
+
+  /* Wave/button specific variables */
+  --wave-grad-start: rgba(194,196,206,1);
+  --wave-grad-end: rgba(230,233,245,1);
+  --wave-text-color: rgba(255,255,255,0.47);
+  --wave-shadow-dark: rgba(134,136,144,0.45);
+  --wave-shadow-light: rgba(255,255,255,0.92);
+
 }
 
 
