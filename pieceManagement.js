@@ -9,6 +9,7 @@ import { toggleAnimatingStat } from './controls.js';
 import { updateScore } from './score.js';
 import { waitForEvent } from './events.js';
 import { addDraggableEvents } from "./eventHandlers.js";
+import { animatePieces } from './animation.js';
 
 
 //-------------
@@ -136,61 +137,12 @@ function moveAndRefill() {
       yOffsetOffset -= PIECE_SIZE;
     }
   }
-  animatePieces(targetPieces, initialYOffsets, async () => {
+  animatePieces(pieces, targetPieces, initialYOffsets, async () => {
     await removeAndRefillMatches();
   });
 }
 
 
-//-------------
-//  Animate
-//-------------
-async function animatePieces(targetPieces, initialYOffsets, onComplete) {
-  const fallTimePerCell = 0.125;
-  const startDelayMs = FALL_START_DELAY_MS; // 演出ディレイ（開始直前）
-
-  const animations = targetPieces.map(async ({ row, col }, index) => {
-    let piece = pieces[row][col];
-    if (!piece) return;
-    let div = createDiv(row, col)
-
-    div.className = 'piece';
-    if (piece && piece.color) {
-      div.classList.add(piece.color);
-    }
-    addSpecialClass(div, piece)
-
-    div.style.transform = `translate3d(0px, ${initialYOffsets[index]}px, 0)`;
-    div.style.willChange = 'transform';
-
-    const distance = Math.abs(initialYOffsets[index]);
-    const cellsToFall = distance / PIECE_SIZE;
-    const duration = cellsToFall * fallTimePerCell;
-
-    const endPromise = waitForEvent(div, 'transitionend', Math.max(1000, (duration + (startDelayMs / 1000) + 0.2) * 1000));
-
-    await new Promise((resolve) => {
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          div.style.transition = `transform ${duration}s cubic-bezier(0.34, 1.41, 0.4, 0.895) ${startDelayMs}ms`; //少し行き過ぎる
-          // div.style.transition = `transform ${duration}s cubic-bezier(0.55, 0.085, 0.68, 0.53)`; //ease in
-          // div.style.transition = `transform ${duration}s linear`;
-          div.style.transform = `translate3d(0px, 0px, 0)`;
-          resolve();
-        });
-      });
-    });
-
-    await endPromise;
-
-    div.style.transition = '';
-    div.style.transform = '';
-    div.style.willChange = '';
-  });
-
-  await Promise.all(animations);
-  if (onComplete) onComplete();
-}
 
 
 
