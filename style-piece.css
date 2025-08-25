@@ -111,9 +111,9 @@ td {
   bottom: 0;
   background-image: url('./assets/images/special/bomb.png');
   background-size: cover;
-  animation: waintg-bomb 1s linear infinite;
+  animation: waiting-bomb 1s linear infinite;
 }
-@keyframes waintg-bomb {
+@keyframes waiting-bomb {
   0%, 100% { 
     opacity: 0.7; 
     transform: scale(0.9);
