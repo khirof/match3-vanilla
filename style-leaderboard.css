@@ -1,0 +1,112 @@
+/****************************************************/
+/*  Leaderboard Modal                               */
+/****************************************************/
+.leaderboard-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 18px;
+  width: clamp(260px, 80vw, 360px);
+  max-height: 75vh;
+  overflow: auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  font-family: var(--font-family);
+  color: #333;
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+}
+
+.leaderboard-title {
+  font-weight: 700;
+  font-size: 18px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: #222;
+}
+
+.leaderboard-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.leaderboard-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 4px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+
+.leaderboard-list li:last-child {
+  border-bottom: none;
+}
+
+.leaderboard-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.leaderboard-score {
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  color: #111;
+}
+
+.leaderboard-empty {
+  text-align: center;
+  opacity: 0.8;
+  padding: 8px 0;
+}
+
+.leaderboard-buttons {
+  display: flex;
+  gap: 8px;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+.leaderboard-button {
+  appearance: none;
+  border: 1px solid rgba(0,0,0,0.1);
+  background: #f7f7f9;
+  color: #222;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+  transition: background-color 0.2s, box-shadow 0.2s, transform 0.02s;
+  font-family: var(--font-family);
+}
+
+.leaderboard-button:hover {
+  background: #efeff3;
+}
+
+.leaderboard-button:active {
+  transform: scale(0.98);
+}
+
+.leaderboard-button--primary {
+  background: #4973ff;
+  color: #fff;
+  border: none;
+  box-shadow: 0 6px 16px rgba(73,115,255,0.25);
+}
+
+.leaderboard-button--danger {
+  background: #ff5d5d;
+  color: #fff;
+  border: none;
+}
+
+

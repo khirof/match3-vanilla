@@ -1,13 +1,14 @@
 /****************************************************/
 /*　             MATCH文字アニメーション              */
 /****************************************************/
-ul {
+/* Scope to animated text only to avoid leaking styles to other lists (e.g. leaderboard) */
+#animated-text {
   position: absolute;
   top: var(--match-top-margin); 
   display: flex;
   z-index: 5; /*これないと消える*/
 }
-li {
+#animated-text li {
   list-style: none;
   font-family: var(--font-family);
   font-size: var(--match-font-size);
@@ -31,23 +32,23 @@ li {
     text-shadow: 0 0 7px #f9f900, 0 0 50px #af6c00, -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color) ;
   }
 }
-li:nth-child(1) {
+#animated-text li:nth-child(1) {
   animation-delay: calc(-1 * 0.8 * var(--match-ani-interval));
   color: var(--red-color);
 }
-li:nth-child(2) {
+#animated-text li:nth-child(2) {
   animation-delay: calc(-1 * 0.6 * var(--match-ani-interval));
   color: var(--yellow-color);
 }	
-li:nth-child(3) {
+#animated-text li:nth-child(3) {
   animation-delay: calc(-1 * 0.4 * var(--match-ani-interval));
   color: var(--green-color);
 }
-li:nth-child(4) {
+#animated-text li:nth-child(4) {
   animation-delay: calc(-1 * 0.2 * var(--match-ani-interval));
   color: var(--blue-color);
 }
-li:nth-child(5) {
+#animated-text li:nth-child(5) {
   animation-delay: 0s;
   color: var(--purple-color);
 }

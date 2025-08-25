@@ -61,54 +61,45 @@ setOnTimeOver(gameOver);
 
 function renderLeaderboardOverlay(withGameOver) {
   const container = document.createElement('div');
-  container.style.position = 'absolute';
-  container.style.top = '50%';
-  container.style.left = '50%';
-  container.style.transform = 'translate(-50%, -50%)';
-  container.style.background = 'rgba(255,255,255,0.9)';
-  container.style.borderRadius = '12px';
-  container.style.padding = '20px 24px';
-  container.style.width = '320px';
-  container.style.maxHeight = '70vh';
-  container.style.overflow = 'auto';
-  container.style.boxShadow = '0 10px 30px rgba(0,0,0,0.35)';
+  container.className = 'leaderboard-modal';
+  // Prevent clicks inside modal from bubbling to overlay
+  container.addEventListener('click', (ev) => ev.stopPropagation());
 
   const title = document.createElement('div');
   title.textContent = 'Leaderboard';
-  title.style.fontWeight = 'bold';
-  title.style.fontSize = '20px';
-  title.style.marginBottom = '12px';
-  title.style.textAlign = 'center';
+  title.className = 'leaderboard-title';
   container.appendChild(title);
 
   const list = document.createElement('ol');
-  list.style.margin = '0';
-  list.style.paddingLeft = '20px';
+  list.className = 'leaderboard-list';
   const entries = getTop(10);
   if (!entries.length) {
     const empty = document.createElement('div');
     empty.textContent = 'No scores yet';
-    empty.style.textAlign = 'center';
-    empty.style.opacity = '0.8';
+    empty.className = 'leaderboard-empty';
     container.appendChild(empty);
   } else {
     entries.forEach((e) => {
       const li = document.createElement('li');
-      li.textContent = `${e.name} - ${e.score.toLocaleString()}`;
-      li.style.marginBottom = '6px';
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'leaderboard-name';
+      nameSpan.textContent = e.name;
+      const scoreSpan = document.createElement('span');
+      scoreSpan.className = 'leaderboard-score';
+      scoreSpan.textContent = e.score.toLocaleString();
+      li.appendChild(nameSpan);
+      li.appendChild(scoreSpan);
       list.appendChild(li);
     });
     container.appendChild(list);
   }
 
   const buttons = document.createElement('div');
-  buttons.style.display = 'flex';
-  buttons.style.gap = '8px';
-  buttons.style.marginTop = '16px';
-  buttons.style.justifyContent = 'center';
+  buttons.className = 'leaderboard-buttons';
 
   const closeBtn = document.createElement('button');
   closeBtn.textContent = 'Close';
+  closeBtn.className = 'leaderboard-button';
   closeBtn.addEventListener('click', (ev) => {
     ev.stopPropagation();
     closeOverlay();
@@ -117,6 +108,7 @@ function renderLeaderboardOverlay(withGameOver) {
 
   const restartBtn = document.createElement('button');
   restartBtn.textContent = 'Restart';
+  restartBtn.className = 'leaderboard-button leaderboard-button--primary';
   restartBtn.addEventListener('click', (ev) => {
     ev.stopPropagation();
     closeOverlay();
@@ -126,6 +118,7 @@ function renderLeaderboardOverlay(withGameOver) {
 
   const clearBtn = document.createElement('button');
   clearBtn.textContent = 'Clear Scores';
+  clearBtn.className = 'leaderboard-button leaderboard-button--danger';
   clearBtn.addEventListener('click', (ev) => {
     ev.stopPropagation();
     const ok = confirm('Clear all saved scores?');
