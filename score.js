@@ -17,6 +17,10 @@ export function resetScore() {
   updateRemovedPiecesCountDisplay();
 }
 
+export function getScore() {
+  return removedPiecesCount;
+}
+
 function updateRemovedPiecesCountDisplay() {
   const formattedRemovedPiecesCount = removedPiecesCount.toLocaleString();
   removedPiecesCountElement.textContent = formattedRemovedPiecesCount;

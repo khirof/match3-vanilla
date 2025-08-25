@@ -60,10 +60,52 @@ export function resetOverlayAnimation() {
   void overlay.offsetWidth;
 }
 
-export function onOverlayClick(handler) {
+let overlayClickHandlerRef = null;
+export function setOverlayClickHandler(handler) {
   const overlay = getOverlay();
   if (!overlay) return;
-  overlay.addEventListener('click', handler);
+  if (overlayClickHandlerRef) {
+    overlay.removeEventListener('click', overlayClickHandlerRef);
+  }
+  overlayClickHandlerRef = typeof handler === 'function' ? handler : null;
+  if (overlayClickHandlerRef) {
+    overlay.addEventListener('click', overlayClickHandlerRef);
+  }
+}
+
+//-------------
+//  Extended helpers for content/modal control
+//-------------
+
+export function setOverlayContent(node) {
+  const overlay = getOverlay();
+  if (!overlay) return;
+  overlay.innerHTML = '';
+  if (node) overlay.appendChild(node);
+}
+
+export function clearOverlayContent() {
+  const overlay = getOverlay();
+  if (!overlay) return;
+  overlay.innerHTML = '';
+}
+
+export function openOverlay(withGameOver = false) {
+  const overlay = getOverlay();
+  if (!overlay) return;
+  overlay.style.zIndex = 100;
+  overlay.classList.add('fadeIn');
+  overlay.addEventListener('animationend', () => {
+    if (withGameOver) {
+      playSpanAnimations();
+    }
+    overlay.style.pointerEvents = 'all';
+  }, { once: true });
+}
+
+export function closeOverlay() {
+  clearOverlayContent();
+  resetOverlayAnimation();
 }
 
 
