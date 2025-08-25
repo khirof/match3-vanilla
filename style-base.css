@@ -115,8 +115,9 @@ table {
   height: 700px;
   background-color: var(--base-color);
   border-radius: 40px;
-  box-shadow: inset 13px 13px 13px var(--shadow-color2),
-              inset -13px -13px 13px var(--highlight-color1);
+  box-shadow: 
+    inset 16px 16px 32px rgba(134,136,144,0.38),
+    inset -12px -12px 24px rgba(255,255,255,0.92);
   z-index: 1; /* shape要素が下に来るようにz-indexを設定 */
 }
 
