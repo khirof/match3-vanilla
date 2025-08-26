@@ -2,7 +2,7 @@
 //  import
 //-------------
 import { getElement } from "./domManipulation.js";
-import { isInputLocked } from './state.js';
+import { canInteract, beginAnim, endAnim, setPhase, PlayPhase } from './state.js';
 import { pieces, removePieces } from './pieceManagement.js';
 import { ROWS, COLS, PIECE_SIZE } from "./constants.js";
 import { getMatchingPieces } from "./matchManagement.js";
@@ -62,7 +62,7 @@ function handleDrop(event) {
 }
 
 function handleDrag(piece, newRow, newCol, oldRow, oldCol) {
-  if (isInputLocked()) return;
+  if (!canInteract()) return;
   if (!piece) return;
   if (newRow < 0 || newRow >= ROWS || newCol < 0 || newCol >= COLS) {
     return;
@@ -72,6 +72,8 @@ function handleDrag(piece, newRow, newCol, oldRow, oldCol) {
   if (!isAdjacent(piece, newPiece)) {
     return;
   }
+  setPhase(PlayPhase.Swapping);
+  beginAnim();
   swapPieces(piece, newPiece);
   const pieceMatches = getMatchingPieces(piece);
   const newPieceMatches = getMatchingPieces(newPiece);
@@ -88,9 +90,14 @@ function handleDrag(piece, newRow, newCol, oldRow, oldCol) {
           }
         });
         await removePieces(combinedMatches);
+        endAnim();
+        setPhase(PlayPhase.Resolving);
+        setPhase(PlayPhase.Ready);
       });
   } else {
     swapPieces(piece, newPiece);
+    endAnim();
+    setPhase(PlayPhase.Ready);
   }
 }
 

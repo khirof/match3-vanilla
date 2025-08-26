@@ -2,11 +2,11 @@
 //  Controls: button, game start/over, and animation toggle
 //-------------
 
-import { isInputLocked, setAnimating } from './state.js';
+import { isInputLocked, setAnimating, setScene, AppScene } from './state.js';
 import { toggleAnimatedText, resetAnimatedText } from './animatedText.js';
 import { toggleTimeBar, setOnTimeOver } from './timer.js';
 import { resetOverlayAnimation, resetSpanAnimations, playOverlayAnimation, setOverlayClickHandler, openOverlay, setOverlayContent, closeOverlay } from './overlay.js';
-import { initializePieces } from './pieceManagement.js';
+import { initializePieces, clearBoardInstant } from './pieceManagement.js';
 import { changeWord } from './changeButtonWord.js';
 import { resetScore, getScore } from './score.js';
 import { saveEntry, getTop, getLastName, clearAllScores, isHighScore } from './highscore.js';
@@ -15,11 +15,19 @@ export { toggleAnimatingStat, gameStart, gameOver };
 
 const button = document.querySelector('button');
 button.addEventListener('mousedown', () => {
-  if (!isInputLocked()) {
+  // Animate only when board is blank (Title)
+  if (document.querySelectorAll('#table .piece').length === 0) {
     button.classList.add('clicked');
   }
 });
-button.addEventListener('mouseup', gameStart);
+button.addEventListener('mouseup', () => {
+  // Start only allowed on Title scene (blank board)
+  if (document.querySelectorAll('#table .piece').length === 0) {
+    gameStart();
+  } else {
+    // ignore if board is not blank (already playing or game over cleanup not finished)
+  }
+});
 
 function toggleAnimatingStat(bool) {
   setAnimating(bool);
@@ -28,19 +36,26 @@ function toggleAnimatingStat(bool) {
 }
 
 function gameStart() {
-  if (!isInputLocked()) {
-    button.classList.remove('clicked');
-    resetOverlayAnimation();
-    resetSpanAnimations();
-    initializePieces();
-    resetScore();
-    changeWord();
-    setTimeout(changeWord, 2000);
-  }
+  // Allow starting from Title regardless of current input lock
+  button.classList.remove('clicked');
+  setScene(AppScene.Playing);
+  // Disable button interaction during play to prevent :active/hover visuals
+  button.style.pointerEvents = 'none';
+  resetOverlayAnimation();
+  resetSpanAnimations();
+  initializePieces();
+  changeWord();
+  setTimeout(changeWord, 2000);
+  toggleTimeBar(true);
 }
 
-function gameOver() {
-  // Save score flow
+async function gameOver() {
+  // 1) Show Game Over overlay and play animation first
+  setOverlayClickHandler(() => {});
+  openOverlay(true);
+  await waitForGameOverAnimationEnd();
+
+  // 2) Then handle high score prompt (if any)
   const currentScore = getScore();
   if (isHighScore(currentScore, 10)) {
     const last = getLastName();
@@ -52,8 +67,12 @@ function gameOver() {
       }
     }
   }
-  // Show overlay with leaderboard
-  renderLeaderboardOverlay(true);
+
+  // 3) Clear game over text right before leaderboard, then show leaderboard
+  resetSpanAnimations();
+  renderLeaderboardOverlay(false);
+  // Overlays close → return to Title/blank
+  setOverlayClickHandler(returnToTitle);
 }
 
 setOverlayClickHandler(gameStart);
@@ -102,19 +121,11 @@ function renderLeaderboardOverlay(withGameOver) {
   closeBtn.className = 'leaderboard-button';
   closeBtn.addEventListener('click', (ev) => {
     ev.stopPropagation();
-    closeOverlay();
+    returnToTitle();
   });
   buttons.appendChild(closeBtn);
 
-  const restartBtn = document.createElement('button');
-  restartBtn.textContent = 'Restart';
-  restartBtn.className = 'leaderboard-button leaderboard-button--primary';
-  restartBtn.addEventListener('click', (ev) => {
-    ev.stopPropagation();
-    closeOverlay();
-    gameStart();
-  });
-  buttons.appendChild(restartBtn);
+  // Restart button removed (single start button policy)
 
   const clearBtn = document.createElement('button');
   clearBtn.textContent = 'Clear Scores';
@@ -138,9 +149,9 @@ function renderLeaderboardOverlay(withGameOver) {
 
   setOverlayContent(container);
   if (withGameOver) {
-    setOverlayClickHandler(gameStart);
+    setOverlayClickHandler(() => {});
   } else {
-    setOverlayClickHandler(() => closeOverlay());
+    setOverlayClickHandler(returnToTitle);
   }
   openOverlay(Boolean(withGameOver));
 }
@@ -164,5 +175,28 @@ trophyBtn.addEventListener('click', (ev) => {
   ev.stopPropagation();
   renderLeaderboardOverlay(false);
 });
+//-------------
+//  Helpers for Game Over sequencing
+//-------------
+async function waitForGameOverAnimationEnd() {
+  const spans = Array.from(document.querySelectorAll('.animate.four span'));
+  if (!spans.length) return;
+  await Promise.all(spans.map((span) => new Promise((resolve) => {
+    const handler = () => { span.removeEventListener('animationend', handler); resolve(); };
+    span.addEventListener('animationend', handler, { once: true });
+  })));
+}
+
+async function returnToTitle() {
+  // Instant clear; initial animation will play on next start
+  try { clearBoardInstant(); } catch (e) {}
+  toggleTimeBar(false);
+  setScene(AppScene.Title);
+  closeOverlay();
+  // Re-enable button for Title scene and ensure no stuck visual state
+  button.classList.remove('clicked');
+  button.style.pointerEvents = 'auto';
+  resetScore();
+}
 
 

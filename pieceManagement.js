@@ -10,6 +10,9 @@ import { updateScore } from './score.js';
 import { waitForEvent } from './events.js';
 import { addDraggableEvents } from "./eventHandlers.js";
 import { animatePieces } from './animation.js';
+import { saveGameState } from './persistence.js';
+import { getState, setAnimating } from './state.js';
+import { getScore } from './score.js';
 
 
 //-------------
@@ -19,7 +22,11 @@ export {
   pieces,
   addPiece,
   removePieces,
-  initializePieces
+  initializePieces,
+  serializeBoard,
+  hydrateBoard,
+  clearBoardSmooth,
+  clearBoardInstant
 }
 
 
@@ -106,6 +113,24 @@ async function removeAndRefillMatches() {
   } else {  //ここがピース削除連鎖の再帰処理ラスト。
     toggleAnimatingStat(false);
     chainCount = 1;
+    // 明示的にフェーズをReadyへ（入力解放用）
+    try {
+      const { setPhase, PlayPhase } = await import('./state.js');
+      setPhase(PlayPhase.Ready);
+    } catch (e) {}
+    // 安定ポイントでスナップショット保存（Ready/非アニメ時）
+    try {
+      const s = getState();
+      saveGameState({
+        version: 1,
+        scene: s.scene,
+        phase: s.phase,
+        score: getScore(),
+        board: serializeBoard()
+      });
+    } catch (e) {
+      // persistence errors are non-fatal
+    }
   }
 }
 
@@ -174,4 +199,82 @@ function initializePieces() {
   });
   moveAndRefill();
   addDraggableEvents();
+}
+
+
+//-------------
+//  Snapshot
+//-------------
+function serializeBoard() {
+  const rows = ROWS;
+  const cols = COLS;
+  const cells = [];
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const p = pieces[r][c];
+      if (!p) continue;
+      cells.push({
+        row: r,
+        col: c,
+        color: p.color,
+        specialType: p.specialType || 'none'
+      });
+    }
+  }
+  return { rows, cols, cells };
+}
+
+function hydrateBoard(snapshot) {
+  if (!snapshot || !snapshot.cells) return;
+  for (let r = 0; r < ROWS; r++) {
+    if (!pieces[r]) pieces[r] = [];
+    for (let c = 0; c < COLS; c++) {
+      pieces[r][c] = null;
+      clearInnerHTML(r, c);
+    }
+  }
+  snapshot.cells.forEach(cell => {
+    const piece = {
+      color: cell.color,
+      position: [cell.row, cell.col],
+      specialType: cell.specialType && cell.specialType !== 'none' ? cell.specialType : undefined
+    };
+    if (!pieces[cell.row]) pieces[cell.row] = [];
+    pieces[cell.row][cell.col] = piece;
+    addPieceToDOM(piece);
+  });
+}
+
+//-------------
+//  Clear Board Smoothly
+//-------------
+async function clearBoardSmooth() {
+  const fadePromises = [];
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const cell = pieces[r] && pieces[r][c];
+      const shadow = getElement(r, c);
+      if (!shadow) continue;
+      const inner = shadow.querySelector('.piece');
+      if (!inner) continue;
+      // minimal visual change to avoid heavy animations; just clear
+      fadePromises.push((async () => {
+        clearInnerHTML(r, c);
+      })());
+      if (cell) {
+        pieces[r][c] = null;
+      }
+    }
+  }
+  await Promise.all(fadePromises);
+}
+
+function clearBoardInstant() {
+  for (let r = 0; r < ROWS; r++) {
+    if (!pieces[r]) pieces[r] = [];
+    for (let c = 0; c < COLS; c++) {
+      pieces[r][c] = null;
+      clearInnerHTML(r, c);
+    }
+  }
 }
