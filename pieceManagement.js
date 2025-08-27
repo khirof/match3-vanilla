@@ -26,7 +26,8 @@ export {
   serializeBoard,
   hydrateBoard,
   clearBoardSmooth,
-  clearBoardInstant
+  clearBoardInstant,
+  ejectAllPiecesWithGravity
 }
 
 
@@ -270,6 +271,50 @@ async function clearBoardSmooth() {
 }
 
 function clearBoardInstant() {
+  for (let r = 0; r < ROWS; r++) {
+    if (!pieces[r]) pieces[r] = [];
+    for (let c = 0; c < COLS; c++) {
+      pieces[r][c] = null;
+      clearInnerHTML(r, c);
+    }
+  }
+}
+
+//-------------
+//  GameOver Eject Animation
+//-------------
+async function ejectAllPiecesWithGravity() {
+  // Slow overall speed to quarter (4x duration)
+  const durationMs = 3600;
+  const easing = 'cubic-bezier(0.2, 0.8, 0.2, 1)'; // slow start, accelerate
+  const promises = [];
+  for (let r = 0; r < ROWS; r++) {
+    for (let c = 0; c < COLS; c++) {
+      const shadow = getElement(r, c);
+      if (!shadow) continue;
+      const inner = shadow.querySelector('.piece');
+      if (!inner) continue;
+      inner.style.willChange = 'transform, opacity';
+      // Only transition transform. Opacity changes immediately to avoid early transitionend
+      inner.style.transition = `transform ${durationMs}ms ${easing}`;
+      // force reflow
+      void inner.offsetWidth;
+      promises.push(new Promise((resolve) => {
+        const handler = (ev) => {
+          // Ensure we only resolve on transform transition end
+          if (!ev || ev.propertyName === 'transform') {
+            inner.removeEventListener('transitionend', handler);
+            resolve();
+          }
+        };
+        inner.addEventListener('transitionend', handler);
+        // translate far below the board
+        inner.style.transform = `translate3d(0, ${(ROWS + 4) * PIECE_SIZE}px, 0)`;
+      }));
+    }
+  }
+  await Promise.all(promises);
+  // clear DOM and data after animation
   for (let r = 0; r < ROWS; r++) {
     if (!pieces[r]) pieces[r] = [];
     for (let c = 0; c < COLS; c++) {

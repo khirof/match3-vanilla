@@ -93,6 +93,9 @@ table {
   z-index: 2; /* table要素が上に来るようにz-indexを設定 */
   top: calc(var(--table-top-margin) + 15px);  /* ↓のshadow用shapeの中心点と合わせる */
 }
+#center-score {
+  z-index: 5; /* above table(2) and top-cover(3), below overlay(100) */
+}
 
 #shape {
   position: absolute; /* positionをabsoluteに戻す */

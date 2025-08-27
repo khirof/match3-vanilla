@@ -6,7 +6,7 @@ import { isInputLocked, setAnimating, setScene, AppScene } from './state.js';
 import { toggleAnimatedText, resetAnimatedText } from './animatedText.js';
 import { toggleTimeBar, setOnTimeOver } from './timer.js';
 import { resetOverlayAnimation, resetSpanAnimations, playOverlayAnimation, setOverlayClickHandler, openOverlay, setOverlayContent, closeOverlay } from './overlay.js';
-import { initializePieces, clearBoardInstant } from './pieceManagement.js';
+import { initializePieces, clearBoardInstant, ejectAllPiecesWithGravity } from './pieceManagement.js';
 import { changeWord } from './changeButtonWord.js';
 import { resetScore, getScore } from './score.js';
 import { saveEntry, getTop, getLastName, clearAllScores, isHighScore } from './highscore.js';
@@ -38,6 +38,9 @@ function toggleAnimatingStat(bool) {
 function gameStart() {
   // Allow starting from Title regardless of current input lock
   button.classList.remove('clicked');
+  // Remove centered score if present
+  const cs = document.getElementById('center-score');
+  if (cs) cs.remove();
   setScene(AppScene.Playing);
   // Disable button interaction during play to prevent :active/hover visuals
   button.style.pointerEvents = 'none';
@@ -50,29 +53,19 @@ function gameStart() {
 }
 
 async function gameOver() {
-  // 1) Show Game Over overlay and play animation first
-  setOverlayClickHandler(() => {});
-  openOverlay(true);
-  await waitForGameOverAnimationEnd();
+  // 1) No overlay: eject all pieces off-screen with gravity-like animation
+  await ejectAllPiecesWithGravity();
 
-  // 2) Then handle high score prompt (if any)
+  // 2) Save high score automatically with a dummy name (no prompt)
   const currentScore = getScore();
   if (isHighScore(currentScore, 10)) {
-    const last = getLastName();
-    const name = prompt('Enter your name for the leaderboard:', last || '');
-    if (name !== null) {
-      const trimmed = name.trim().slice(0, 20);
-      if (trimmed) {
-        saveEntry({ name: trimmed, score: currentScore });
-      }
-    }
+    const name = 'ダミー';
+    saveEntry({ name, score: currentScore });
   }
 
-  // 3) Clear game over text right before leaderboard, then show leaderboard
-  resetSpanAnimations();
-  renderLeaderboardOverlay(false);
-  // Overlays close → return to Title/blank
-  setOverlayClickHandler(returnToTitle);
+  // 3) Show centered score, enable Start button
+  showCenterScore();
+  button.style.pointerEvents = 'auto';
 }
 
 setOverlayClickHandler(gameStart);
@@ -121,7 +114,7 @@ function renderLeaderboardOverlay(withGameOver) {
   closeBtn.className = 'leaderboard-button';
   closeBtn.addEventListener('click', (ev) => {
     ev.stopPropagation();
-    returnToTitle();
+    closeOverlay();
   });
   buttons.appendChild(closeBtn);
 
@@ -151,7 +144,7 @@ function renderLeaderboardOverlay(withGameOver) {
   if (withGameOver) {
     setOverlayClickHandler(() => {});
   } else {
-    setOverlayClickHandler(returnToTitle);
+    setOverlayClickHandler(() => closeOverlay());
   }
   openOverlay(Boolean(withGameOver));
 }
@@ -192,11 +185,39 @@ async function returnToTitle() {
   try { clearBoardInstant(); } catch (e) {}
   toggleTimeBar(false);
   setScene(AppScene.Title);
-  closeOverlay();
   // Re-enable button for Title scene and ensure no stuck visual state
   button.classList.remove('clicked');
   button.style.pointerEvents = 'auto';
   resetScore();
+}
+
+function showCenterScore() {
+  // Remove any previous score node
+  const prev = document.getElementById('center-score');
+  if (prev) prev.remove();
+  const container = document.createElement('div');
+  container.id = 'center-score';
+  container.style.position = 'absolute';
+  container.style.top = '50%';
+  container.style.left = '50%';
+  container.style.transform = 'translate(-50%, -50%) scale(0.8)';
+  container.style.fontSize = '64px';
+  container.style.fontWeight = '900';
+  container.style.color = '#333';
+  container.style.textShadow = '0 6px 16px rgba(0,0,0,0.2)';
+  container.style.opacity = '0';
+  container.style.transition = 'transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 600ms ease';
+  const val = getScore();
+  container.textContent = `SCORE: ${val.toLocaleString()}`;
+  // Append after table to ensure visual stacking above board
+  const root = document.body;
+  root.appendChild(container);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      container.style.opacity = '1';
+      container.style.transform = 'translate(-50%, -50%) scale(1)';
+    });
+  });
 }
 
 
