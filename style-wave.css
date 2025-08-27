@@ -16,7 +16,7 @@
   letter-spacing: 5px;
   font-family: var(--font-family);
   background: linear-gradient(145deg, var(--wave-grad-start), var(--wave-grad-end));
-  background-color: transparent;
+  background-color: var(--wave-main-col);
 
   border-radius: 12px;
   /* color:var(--base-color); */
@@ -32,6 +32,11 @@
     12px 12px 24px var(--wave-shadow-dark),   /* シャドウ（右下） */
     -10px -10px 20px var(--wave-shadow-light); /* ハイライト（左上） */
   z-index: 5;
+}
+
+/* During play (disabled), revert to transparent background */
+.wave.is-play-disabled {
+  background-color: transparent;
 }
 
 .wave:hover {

@@ -44,6 +44,7 @@ function gameStart() {
   setScene(AppScene.Playing);
   // Disable button interaction during play to prevent :active/hover visuals
   button.style.pointerEvents = 'none';
+  button.classList.add('is-play-disabled');
   resetOverlayAnimation();
   resetSpanAnimations();
   initializePieces();
@@ -54,7 +55,12 @@ function gameStart() {
 
 async function gameOver() {
   // 1) No overlay: eject all pieces off-screen with gravity-like animation
-  await ejectAllPiecesWithGravity();
+  const ejectPromise = ejectAllPiecesWithGravity();
+  // Show score earlier (half of current ejection duration ~2000ms)
+  setTimeout(() => {
+    try { showCenterScore(); } catch (e) {}
+  }, 1000);
+  await ejectPromise;
 
   // 2) Save high score automatically with a dummy name (no prompt)
   const currentScore = getScore();
@@ -63,9 +69,10 @@ async function gameOver() {
     saveEntry({ name, score: currentScore });
   }
 
-  // 3) Show centered score, enable Start button
-  showCenterScore();
+  // 3) Enable Start button
   button.style.pointerEvents = 'auto';
+  button.classList.remove('is-play-disabled');
+  button.classList.remove('clicked');
 }
 
 setOverlayClickHandler(gameStart);
@@ -188,6 +195,7 @@ async function returnToTitle() {
   // Re-enable button for Title scene and ensure no stuck visual state
   button.classList.remove('clicked');
   button.style.pointerEvents = 'auto';
+  button.classList.remove('is-play-disabled');
   resetScore();
 }
 
@@ -208,7 +216,7 @@ function showCenterScore() {
   container.style.opacity = '0';
   container.style.transition = 'transform 600ms cubic-bezier(0.02, 0, 0.15, 1), opacity 600ms ease';
   const val = getScore();
-  container.textContent = `SCORE: ${val.toLocaleString()}`;
+  container.textContent = `${val.toLocaleString()}`;
   // Append after table to ensure visual stacking above board
   const root = document.body;
   root.appendChild(container);
