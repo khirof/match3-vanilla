@@ -284,9 +284,15 @@ function clearBoardInstant() {
 //  GameOver Eject Animation
 //-------------
 async function ejectAllPiecesWithGravity() {
-  // Slow overall speed to quarter (4x duration)
-  const durationMs = 3600;
-  const easing = 'cubic-bezier(0.2, 0.8, 0.2, 1)'; // slow start, accelerate
+  // Slower overall speed with organic stagger and slight drift/tilt
+  const durationMs = 2000;
+  // Stronger ease-in: very slow start, then accelerate late
+  const easing = 'cubic-bezier(0.05, 0.0, 0.2, 1)';
+  const baseDelayPerRow = 60; // ms
+  const maxJitter = 90; // ms
+  const horizontalDriftPx = 12; // max |x| drift
+  const maxTiltDeg = 8; // rotation
+
   const promises = [];
   for (let r = 0; r < ROWS; r++) {
     for (let c = 0; c < COLS; c++) {
@@ -294,23 +300,41 @@ async function ejectAllPiecesWithGravity() {
       if (!shadow) continue;
       const inner = shadow.querySelector('.piece');
       if (!inner) continue;
-      inner.style.willChange = 'transform, opacity';
-      // Only transition transform. Opacity changes immediately to avoid early transitionend
-      inner.style.transition = `transform ${durationMs}ms ${easing}`;
-      // force reflow
-      void inner.offsetWidth;
-      promises.push(new Promise((resolve) => {
-        const handler = (ev) => {
-          // Ensure we only resolve on transform transition end
-          if (!ev || ev.propertyName === 'transform') {
-            inner.removeEventListener('transitionend', handler);
-            resolve();
-          }
-        };
-        inner.addEventListener('transitionend', handler);
-        // translate far below the board
-        inner.style.transform = `translate3d(0, ${(ROWS + 4) * PIECE_SIZE}px, 0)`;
-      }));
+
+      // compute per-piece delay and drift
+      const delayMs = r * baseDelayPerRow + Math.floor(Math.random() * maxJitter);
+      const dx = (Math.random() - 0.5) * 2 * horizontalDriftPx; // -drift..+drift
+      const rot = (Math.random() - 0.5) * 2 * maxTiltDeg; // -tilt..+tilt
+
+      // Prefer Web Animations API for robust easing; fallback to CSS transition
+      const finalY = (ROWS + 4) * PIECE_SIZE;
+      if (inner.animate) {
+        const anim = inner.animate(
+          [
+            { transform: 'translate3d(0, 0, 0) rotate(0deg)' },
+            { transform: `translate3d(${dx}px, ${finalY}px, 0) rotate(${rot}deg)` }
+          ],
+          { duration: durationMs, easing, delay: delayMs, fill: 'forwards' }
+        );
+        promises.push(anim.finished.catch(() => {}));
+      } else {
+        inner.style.willChange = 'transform';
+        inner.style.transitionProperty = 'transform';
+        inner.style.transitionTimingFunction = easing;
+        inner.style.transitionDuration = `${durationMs}ms`;
+        inner.style.transitionDelay = `${delayMs}ms`;
+        void inner.offsetWidth;
+        promises.push(new Promise((resolve) => {
+          const handler = (ev) => {
+            if (!ev || ev.propertyName === 'transform') {
+              inner.removeEventListener('transitionend', handler);
+              resolve();
+            }
+          };
+          inner.addEventListener('transitionend', handler);
+          inner.style.transform = `translate3d(${dx}px, ${finalY}px, 0) rotate(${rot}deg)`;
+        }));
+      }
     }
   }
   await Promise.all(promises);

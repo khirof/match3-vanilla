@@ -206,7 +206,7 @@ function showCenterScore() {
   container.style.color = '#333';
   container.style.textShadow = '0 6px 16px rgba(0,0,0,0.2)';
   container.style.opacity = '0';
-  container.style.transition = 'transform 600ms cubic-bezier(0.22, 1, 0.36, 1), opacity 600ms ease';
+  container.style.transition = 'transform 600ms cubic-bezier(0.02, 0, 0.15, 1), opacity 600ms ease';
   const val = getScore();
   container.textContent = `SCORE: ${val.toLocaleString()}`;
   // Append after table to ensure visual stacking above board
