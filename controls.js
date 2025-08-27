@@ -7,8 +7,8 @@ import { toggleAnimatedText, resetAnimatedText } from './animatedText.js';
 import { toggleTimeBar, setOnTimeOver } from './timer.js';
 import { resetOverlayAnimation, resetSpanAnimations, playOverlayAnimation, setOverlayClickHandler, openOverlay, setOverlayContent, closeOverlay } from './overlay.js';
 import { initializePieces, clearBoardInstant, ejectAllPiecesWithGravity } from './pieceManagement.js';
-import { changeWord } from './changeButtonWord.js';
 import { resetScore, getScore } from './score.js';
+import { setWord } from './changeButtonWord.js';
 import { saveEntry, getTop, getLastName, clearAllScores, isHighScore } from './highscore.js';
 
 export { toggleAnimatingStat, gameStart, gameOver };
@@ -45,11 +45,13 @@ function gameStart() {
   // Disable button interaction during play to prevent :active/hover visuals
   button.style.pointerEvents = 'none';
   button.classList.add('is-play-disabled');
+  // Keep button visually pressed during play
+  button.classList.add('clicked');
   resetOverlayAnimation();
   resetSpanAnimations();
   initializePieces();
-  changeWord();
-  setTimeout(changeWord, 2000);
+  // Show PLAYING label during play
+  try { setWord('playing'); } catch (e) {}
   toggleTimeBar(true);
 }
 
@@ -73,6 +75,10 @@ async function gameOver() {
   button.style.pointerEvents = 'auto';
   button.classList.remove('is-play-disabled');
   button.classList.remove('clicked');
+  // Switch label to restart and show again
+  try { setWord('restart'); } catch (e) {}
+  const textContainer2 = button.querySelector('.text');
+  if (textContainer2) textContainer2.style.opacity = '1';
 }
 
 setOverlayClickHandler(gameStart);

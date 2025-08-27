@@ -1,54 +1,32 @@
 var words = document.getElementsByClassName('word');
-var wordArray = [];
 var currentWord = 0;
 
-words[currentWord].style.opacity = 1;
+// Initialize: show first word, hide others
 for (var i = 0; i < words.length; i++) {
-  splitLetters(words[i]);
+  words[i].style.opacity = (i === 0) ? 1 : 0;
 }
 
 export function changeWord() {
-  var cw = wordArray[currentWord];
-  var nw = currentWord == words.length-1 ? wordArray[0] : wordArray[currentWord+1];
-  for (var i = 0; i < cw.length; i++) {
-    animateLetterOut(cw, i);
+  if (!words || words.length === 0) return;
+  var next = (currentWord === words.length - 1) ? 0 : currentWord + 1;
+  words[currentWord].style.opacity = 0;
+  words[next].style.opacity = 1;
+  currentWord = next;
+}
+
+export function setWord(text) {
+  if (!words || words.length === 0) return;
+  // Find span containing exact text (case-insensitive)
+  var targetIndex = -1;
+  for (var i = 0; i < words.length; i++) {
+    if (String(words[i].textContent).trim().toLowerCase() === String(text).trim().toLowerCase()) {
+      targetIndex = i;
+      break;
+    }
   }
-  
-  for (var i = 0; i < nw.length; i++) {
-    nw[i].className = 'letter behind';
-    nw[0].parentElement.style.opacity = 1;
-    animateLetterIn(nw, i);
+  if (targetIndex === -1) return;
+  for (var j = 0; j < words.length; j++) {
+    words[j].style.opacity = (j === targetIndex) ? 1 : 0;
   }
-  
-  currentWord = (currentWord == wordArray.length-1) ? 0 : currentWord+1;
+  currentWord = targetIndex;
 }
-
-function animateLetterOut(cw, i) {
-  setTimeout(function() {
-    cw[i].className = 'letter out';
-  }, i*80);
-}
-
-function animateLetterIn(nw, i) {
-  setTimeout(function() {
-    nw[i].className = 'letter in';
-  }, 340+(i*80));
-}
-
-function splitLetters(word) {
-  var content = word.innerHTML;
-  word.innerHTML = '';
-  var letters = [];
-  for (var i = 0; i < content.length; i++) {
-    var letter = document.createElement('span');
-    letter.className = 'letter';
-    letter.innerHTML = content.charAt(i);
-    word.appendChild(letter);
-    letters.push(letter);
-  }
-  
-  wordArray.push(letters);
-}
-
-
-
