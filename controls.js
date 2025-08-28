@@ -122,14 +122,14 @@ function renderLeaderboardOverlay(withGameOver) {
   const buttons = document.createElement('div');
   buttons.className = 'leaderboard-buttons';
 
-  const closeBtn = document.createElement('button');
-  closeBtn.textContent = 'Close';
-  closeBtn.className = 'leaderboard-button';
-  closeBtn.addEventListener('click', (ev) => {
+  const backBtn = document.createElement('button');
+  backBtn.textContent = 'Back';
+  backBtn.className = 'leaderboard-button leaderboard-button--primary';
+  backBtn.addEventListener('click', (ev) => {
     ev.stopPropagation();
-    closeOverlay();
+    renderMenuOverlay();
   });
-  buttons.appendChild(closeBtn);
+  buttons.appendChild(backBtn);
 
   // Restart button removed (single start button policy)
 
@@ -160,6 +160,89 @@ function renderLeaderboardOverlay(withGameOver) {
     setOverlayClickHandler(() => closeOverlay());
   }
   openOverlay(Boolean(withGameOver));
+}
+
+// Menu overlay with navigation to Leaderboard and Settings
+function renderMenuOverlay() {
+  const container = document.createElement('div');
+  container.className = 'leaderboard-modal';
+  container.addEventListener('click', (ev) => ev.stopPropagation());
+
+  const title = document.createElement('div');
+  title.textContent = 'Menu';
+  title.className = 'leaderboard-title';
+  container.appendChild(title);
+
+  const buttons = document.createElement('div');
+  buttons.className = 'leaderboard-buttons';
+
+  const toLeaderboardBtn = document.createElement('button');
+  toLeaderboardBtn.textContent = 'Leaderboard';
+  toLeaderboardBtn.className = 'leaderboard-button leaderboard-button--primary';
+  toLeaderboardBtn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    renderLeaderboardOverlay(false);
+  });
+  buttons.appendChild(toLeaderboardBtn);
+
+  const toSettingsBtn = document.createElement('button');
+  toSettingsBtn.textContent = 'Settings';
+  toSettingsBtn.className = 'leaderboard-button';
+  toSettingsBtn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    renderSettingsOverlay();
+  });
+  buttons.appendChild(toSettingsBtn);
+
+  const closeBtn = document.createElement('button');
+  closeBtn.textContent = 'Close';
+  closeBtn.className = 'leaderboard-button';
+  closeBtn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    closeOverlay();
+  });
+  buttons.appendChild(closeBtn);
+
+  container.appendChild(buttons);
+
+  setOverlayContent(container);
+  setOverlayClickHandler(() => closeOverlay());
+  openOverlay(false);
+}
+
+// Settings overlay with Back to Menu
+function renderSettingsOverlay() {
+  const container = document.createElement('div');
+  container.className = 'leaderboard-modal';
+  container.addEventListener('click', (ev) => ev.stopPropagation());
+
+  const title = document.createElement('div');
+  title.textContent = 'Settings';
+  title.className = 'leaderboard-title';
+  container.appendChild(title);
+
+  const empty = document.createElement('div');
+  empty.textContent = 'No settings available yet';
+  empty.className = 'leaderboard-empty';
+  container.appendChild(empty);
+
+  const buttons = document.createElement('div');
+  buttons.className = 'leaderboard-buttons';
+
+  const backBtn = document.createElement('button');
+  backBtn.textContent = 'Back';
+  backBtn.className = 'leaderboard-button leaderboard-button--primary';
+  backBtn.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    renderMenuOverlay();
+  });
+  buttons.appendChild(backBtn);
+
+  container.appendChild(buttons);
+
+  setOverlayContent(container);
+  setOverlayClickHandler(() => closeOverlay());
+  openOverlay(false);
 }
 
 // Static Menu button click handler
