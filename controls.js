@@ -302,7 +302,7 @@ function showCenterScore() {
   const val = getScore();
   container.textContent = `${val.toLocaleString()}`;
   // Append after table to ensure visual stacking above board
-  const root = document.body;
+  const root = document.getElementById('table') || document.body;
   root.appendChild(container);
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {
