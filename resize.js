@@ -4,7 +4,7 @@
 
 function resizeGame() {
     const gameWidth = 720;
-    const gameHeight = 950;
+    const gameHeight = 1200;
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;

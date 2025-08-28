@@ -97,7 +97,7 @@
 #progressbar{
   height: 26px;
   position: absolute;
-  top: 70px; 
+  top: 90px; 
   left: 50%;
   width: 140px;
   transform: translateX(calc(-50% - 150px));
