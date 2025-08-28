@@ -41,6 +41,15 @@
   --wave-shadow-dark: rgba(134,136,144,0.95);
   --wave-shadow-light: rgba(255,255,255,0.92);
 
+  /* Start/Menu shared geometry */
+  --start-top: 870px;
+  --start-width: 300px;
+  --start-height: 70px;
+  --menu-gap: 110px;
+  /* Menu specific sizing */
+  --menu-scale: 0.85; /* 70% of Start height */
+  --menu-size: calc(var(--start-height) * var(--menu-scale));
+
 }
 
 
@@ -64,6 +73,61 @@ body {
   align-items: center;
   background-color: var(--base-color);
   padding: 0;
+}
+
+/* When Start is visually pressed, mirror its width/height to keep Menu synced */
+body:has(.wave.clicked) {
+  --start-width: 297px;
+  --start-height: 69px;
+}
+
+/****************************************************/
+/*　                 Menu Button                     */
+/****************************************************/
+.menu-button {
+  appearance: none;
+  position: absolute; /* align within same containing context as Start */
+  height: var(--menu-size);
+  width: var(--menu-size);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: calc(var(--menu-size) * 0.45);
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-family);
+  /* Debossed gear icon: bright hover style applied by default */
+  color: var(--base-color);
+  text-shadow: -1px -1px 0 var(--purewhite-color), 1px 1px 0 var(--textshadow-color);
+  background: linear-gradient(145deg, var(--wave-grad-start), var(--wave-grad-end));
+  background-color: var(--wave-main-col);
+  box-shadow:
+    12px 12px 24px var(--wave-shadow-dark),
+    -10px -10px 20px var(--wave-shadow-light);
+  transition: box-shadow 0.2s ease, transform 0.02s ease;
+}
+.menu-button {
+  /* Align with Start (.wave): same top and computed left */
+  top: var(--start-top);
+  left: calc(50% + (var(--start-width) / 2) + var(--menu-gap));
+  transform: translate(-50%, -50%);
+  z-index: 5;
+}
+.menu-button:hover {
+  box-shadow:
+    12px 12px 24px var(--wave-shadow-dark),
+    -10px -10px 20px var(--wave-shadow-light);
+  /* No visual change; same as default */
+}
+.menu-button:active {
+  background: var(--base-color);
+  background-color: var(--base-color);
+  box-shadow:
+    inset 4px 4px 8px var(--wave-shadow-dark),
+    inset -3px -3px 6px var(--wave-shadow-light);
 }
 
 #top-cover {  /* ピース落下の最初の位置に覆いかぶせるカバーみたいなの*/

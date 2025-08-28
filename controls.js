@@ -162,25 +162,20 @@ function renderLeaderboardOverlay(withGameOver) {
   openOverlay(Boolean(withGameOver));
 }
 
-// Floating button to open leaderboard anytime
-const trophyBtn = document.createElement('button');
-trophyBtn.textContent = '🏆';
-trophyBtn.title = 'Leaderboard';
-trophyBtn.style.position = 'fixed';
-trophyBtn.style.right = '16px';
-trophyBtn.style.bottom = '16px';
-trophyBtn.style.borderRadius = '50%';
-trophyBtn.style.width = '48px';
-trophyBtn.style.height = '48px';
-trophyBtn.style.fontSize = '20px';
-trophyBtn.style.boxShadow = '0 6px 16px rgba(0,0,0,0.25)';
-trophyBtn.style.border = 'none';
-trophyBtn.style.cursor = 'pointer';
-document.body.appendChild(trophyBtn);
-trophyBtn.addEventListener('click', (ev) => {
-  ev.stopPropagation();
-  renderLeaderboardOverlay(false);
-});
+// Static Menu button click handler
+const menuButton = document.getElementById('menu-button');
+if (menuButton) {
+  menuButton.addEventListener('click', (ev) => {
+    ev.stopPropagation();
+    // Reuse Menu overlay
+    try {
+      renderMenuOverlay();
+    } catch (_) {
+      // fallback to leaderboard if menu is not available in this build
+      try { renderLeaderboardOverlay(false); } catch (__) {}
+    }
+  });
+}
 //-------------
 //  Helpers for Game Over sequencing
 //-------------
