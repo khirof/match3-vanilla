@@ -65,7 +65,7 @@
 
   /* Safe-area and UI offsets */
   --ui-top-base: 16px;
-  --ui-bottom-base: 24px;
+  --ui-bottom-base: 60px;
   --ui-top-offset: calc(max(env(safe-area-inset-top, 0px), var(--ui-top-base)));
   --ui-bottom-offset: calc(max(env(safe-area-inset-bottom, 0px), var(--ui-bottom-base)));
 
