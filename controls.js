@@ -301,8 +301,9 @@ function showCenterScore() {
   container.style.transition = 'transform 600ms cubic-bezier(0.02, 0, 0.15, 1), opacity 600ms ease';
   const val = getScore();
   container.textContent = `${val.toLocaleString()}`;
-  // Append after table to ensure visual stacking above board
-  const root = document.getElementById('table') || document.body;
+  // Append to board so it's centered including board padding and not clipped by table overflow
+  const root = document.getElementById('board') || document.body;
+  container.style.pointerEvents = 'none';
   root.appendChild(container);
   requestAnimationFrame(() => {
     requestAnimationFrame(() => {

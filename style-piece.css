@@ -2,8 +2,8 @@
 /*　             ピースのベーススタイル               */
 /****************************************************/
 td {
-  width: 70px;
-  height: 70px;
+  width: var(--piece-size, 70px);
+  height: var(--piece-size, 70px);
   border: 0px solid #ccc;
   padding: 0;
 }
@@ -171,7 +171,7 @@ td {
 .doubleBomb-animation {
   animation: doublerotation 0.5s linear forwards;
   background-image: url('./assets/images/special/bomb.png');
-  background-size: 70px 70px;
+  background-size: var(--piece-size, 70px) var(--piece-size, 70px);
 }
 @keyframes doublerotation {
   0% {
@@ -292,7 +292,7 @@ td {
 .verticalBomb-animation {
   animation: shock-vertical2 0.5s linear forwards;
   background-image: url('./assets/images/special/stripe_v.png');
-  background-size: 70px 70px;
+  background-size: var(--piece-size, 70px) var(--piece-size, 70px);
 }
 @keyframes shock-vertical2 {
     0% {
@@ -316,7 +316,7 @@ td {
   .horizontalBomb-animation {
     animation: shock-horizontal2 0.5s linear forwards;
     background-image: url('./assets/images/special/stripe_h.png');
-    background-size: 70px 70px;
+    background-size: var(--piece-size, 70px) var(--piece-size, 70px);
   }
   @keyframes shock-horizontal2 {
     0% {

@@ -5,8 +5,14 @@
 #animated-text {
   position: absolute;
   top: var(--match-top-margin);
-  left: 50%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   display: flex;
+  justify-content: center;
+  transform: translateX(var(--match-translateX));
   z-index: 5; /*これないと消える*/
 }
 #animated-text li {
@@ -15,7 +21,6 @@
   font-size: var(--match-font-size);
   letter-spacing: var(--match-letter-space);
   animation: loading var(--match-ani-interval) linear infinite;
-  transform: translateX(calc(-50% + var(--match-translateX)));
     text-shadow: -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color) ;
   animation-play-state: paused;
   animation-fill-mode: forwards;

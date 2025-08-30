@@ -22,17 +22,17 @@
   --purewhite-color: #ffffff;
   --textshadow-color: #666870;
   /* Removed legacy Y-gap variables; use --board-shift-y instead */
-  --board-width: 700px;
-  --board-height: 700px;
-  --board-shift-y: 0px; /* +/- shift relative to vertical center */
-  --score-top-margin: 67px;
+  --board-width: 630px;
+  --board-height: 630px;
+  --board-shift-y: -40px; /* +/- shift relative to vertical center */
+  --score-top-margin: 200px;
   --score-width: 250px;
   --score-text-size: 32px;
   --score-translateX: 200px;
   --match-top-margin: 40px;
-  --match-translateX: 10px;
-  --match-font-size: 48px;
-  --match-letter-space: 20px;
+  --match-translateX: 30px;
+  --match-font-size: 100px;
+  --match-letter-space: 60px;
   --match-ani-interval: 1s;
   --font-family: Roboto, Arial, Sans-serif;
   --wave-main-col: #4973ff66;
@@ -46,7 +46,7 @@
 
   /* Start/Menu shared geometry */
   --start-base-width: 300px;
-  --start-base-height: 70px;
+  --start-base-height: 100px;
   --start-pressed-delta-w: -3px;
   --start-pressed-delta-h: -1px;
   --start-width: var(--start-base-width);
@@ -58,14 +58,14 @@
   --menu-size: calc(var(--start-height) * var(--menu-scale));
 
   /* Progress bar (timer) positioning */
-  --progress-top-margin: 90px;
+  --progress-top-margin: 200px;
   --progress-translateX: -150px;
   --progress-width: 140px;
   --progress-height: 26px;
 
   /* Safe-area and UI offsets */
-  --ui-top-base: 16px;
-  --ui-bottom-base: 60px;
+  --ui-top-base: 0px;
+  --ui-bottom-base: 150px;
   --ui-top-offset: calc(max(env(safe-area-inset-top, 0px), var(--ui-top-base)));
   --ui-bottom-offset: calc(max(env(safe-area-inset-bottom, 0px), var(--ui-bottom-base)));
 
@@ -164,7 +164,7 @@ body:has(.wave.clicked) {
 }
 .menu-button {
   /* Align with Start (.wave) inside #controls */
-  bottom: 0;
+  bottom: calc((var(--start-height) - var(--menu-size)) / 2);
   left: calc(50% + (var(--start-width) / 2) + var(--menu-gap));
   transform: translate(-50%, 0);
   top: auto;
@@ -191,6 +191,12 @@ body:has(.wave.clicked) {
 /****************************************************/
 #table {
   overflow: hidden;
+  width: calc(var(--board-width) - (var(--board-inner-padding, 0px) * 2));
+  height: calc(var(--board-height) - (var(--board-inner-padding, 0px) * 2));
+  table-layout: fixed;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin: var(--board-inner-padding, 0px);
 }
 
 
@@ -200,7 +206,9 @@ body:has(.wave.clicked) {
 table {
   position: relative;
   z-index: 2; /* table要素が上に来るようにz-indexを設定 */
-  top: 15px;  /* ↓のshadow用shapeの中心点と合わせる */
+  top: 0;  /* ボードと厳密に一致させる */
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 #center-score {
   z-index: 5; /* above table(2) and top-cover(3), below overlay(100) */
