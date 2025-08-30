@@ -45,8 +45,12 @@
   --wave-shadow-light: rgba(255,255,255,0.92);
 
   /* Start/Menu shared geometry */
-  --start-width: 300px;
-  --start-height: 70px;
+  --start-base-width: 300px;
+  --start-base-height: 70px;
+  --start-pressed-delta-w: -3px;
+  --start-pressed-delta-h: -1px;
+  --start-width: var(--start-base-width);
+  --start-height: var(--start-base-height);
   --menu-gap: 105px;
 
   /* Menu specific sizing */  
@@ -126,8 +130,8 @@ body {
 
 /* When Start is visually pressed, mirror its width/height to keep Menu synced */
 body:has(.wave.clicked) {
-  --start-width: 297px;
-  --start-height: 69px;
+  --start-width: calc(var(--start-base-width) + var(--start-pressed-delta-w));
+  --start-height: calc(var(--start-base-height) + var(--start-pressed-delta-h));
 }
 
 /****************************************************/

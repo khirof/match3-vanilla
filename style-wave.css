@@ -7,7 +7,7 @@
   position: absolute;
   bottom: 0;
   top: auto;
-  height: 70px;
+  height: var(--start-height);
   width:var(--start-width);
   border: none;
   display: inline-block;
@@ -75,8 +75,8 @@
     text-shadow 0.6s ease,
     color 0.4s ease
     ;
-  width: 297px;
-  height:69px;
+  width: var(--start-width);
+  height: var(--start-height);
 }
 
 /* Overlay inner-shadow above wave graphics, below text */
