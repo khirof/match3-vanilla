@@ -95,12 +95,12 @@
 /*　                 タイマー代わり                   */
 /****************************************************/
 #progressbar{
-  height: 26px;
+  height: var(--progress-height);
   position: absolute;
-  top: 90px; 
+  top: var(--progress-top-margin); 
   left: 50%;
-  width: 140px;
-  transform: translateX(calc(-50% - 150px));
+  width: var(--progress-width);
+  transform: translateX(calc(-50% + var(--progress-translateX)));
   background:var(--base-color);
   border-radius: 10px;
   margin: -20px 0 0 -100px;

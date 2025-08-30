@@ -46,9 +46,15 @@
   --start-width: 300px;
   --start-height: 70px;
   --menu-gap: 105px;
-  /* Menu specific sizing */
+  /* Menu specific sizing */  
   --menu-scale: 0.85; /* 70% of Start height */
   --menu-size: calc(var(--start-height) * var(--menu-scale));
+
+  /* Progress bar (timer) positioning */
+  --progress-top-margin: 90px;
+  --progress-translateX: -150px;
+  --progress-width: 140px;
+  --progress-height: 26px;
 
 }
 
