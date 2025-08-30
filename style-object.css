@@ -61,18 +61,20 @@
 
 
 /****************************************************/
-/*　                    スコア                       */
+/*	                    スコア                       */
 /****************************************************/
 #removed-pieces-count {
   position: absolute;
   top: var(--score-top-margin);
   left: 50%;
   transform: translateX(calc(-50% + var(--score-translateX)));
-  text-align: right;
+  text-align: center;
   font-size: var(--score-text-size);
   width: var(--score-width);
   font-family: var(--font-family);
   letter-spacing: 3px;
+  font-variant-numeric: tabular-nums; /* keep center fixed as digits change */
+  font-feature-settings: "tnum" 1; /* Safari fallback */
   text-shadow: -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color) ;
   color:var(--base-color);
   z-index: 4; /*これないと消える*/
@@ -98,50 +100,33 @@
 
 
 /****************************************************/
-/*　                 タイマー代わり                   */
+/*                 タイマー（円形）                  */
 /****************************************************/
-#progressbar{
-  height: var(--progress-height);
+#circular-timer {
   position: absolute;
-  top: var(--progress-top-margin);
+  top: var(--timer-top-margin);
   left: 50%;
-  width: var(--progress-width);
-  transform: translateX(calc(-50% + var(--progress-translateX)));
-  background:var(--base-color);
-  border-radius: 10px;
-  margin: -20px 0 0 -100px;
-  padding: 2px;
+  transform: translateX(calc(-50% + var(--timer-translateX)));
+  width: var(--timer-size);
+  height: var(--timer-size);
+  display: grid;
+  place-items: center;
   z-index: 6;
-  box-shadow: inset 2px 2px 3px var(--shadow-color1),
-              inset -2px -2px 3px var(--highlight-color1);
+}
 
-}
-#loading{
-  transition: all 500ms ease;
-  height: 20px;
-  width: calc(100% - 10px);
-  border-radius: 8px;
-  background-image: 
-  repeating-linear-gradient(
-  135deg,
-    var(--red-color) 0px, var(--red-color) 4px,
-    var(--yellow-color) 4px,var(--yellow-color) 8px,
-    var(--green-color) 8px,var(--green-color) 12px,
-    var(--blue-color) 12px,var(--blue-color) 16px,
-    var(--purple-color) 16px,var(--purple-color) 20px
-  );
+#circular-timer .ct-label {
   position: absolute;
-  margin: 3px;
-  display: inline-block;
-  animation: load 10s ease infinite;
-  animation-play-state: paused;
-  animation-fill-mode: forwards;
-}
-@keyframes load{
-  0%{
-    width: 0%;
-  }
-  10%{
-    width: 10%;
-  }
+  inset: 0;
+  border-radius: 50%;
+  /* transparent label surface so water remains visible */
+  background: transparent;
+  display: grid;
+  place-items: center;
+  color: var(--base-color);
+  font-family: var(--font-family);
+  font-weight: 900;
+  font-size: calc(var(--timer-size) * 0.34);
+  text-shadow: -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color);
+  pointer-events: none;
+  z-index: 2;
 }

@@ -24,18 +24,19 @@
   /* Removed legacy Y-gap variables; use --board-shift-y instead */
   --board-width: 630px;
   --board-height: 630px;
-  --board-shift-y: -40px; /* +/- shift relative to vertical center */
+  --board-shift-y: 20px; /* +/- shift relative to vertical center */
   --score-top-margin: 200px;
   --score-width: 250px;
   --score-text-size: 32px;
-  --score-translateX: 200px;
-  --match-top-margin: 40px;
-  --match-translateX: 30px;
-  --match-font-size: 100px;
-  --match-letter-space: 60px;
+  --score-translateX: 0px;
+  --match-top-margin: 60px;
+  --match-translateX: 45px;
+  --match-font-size: 80px;
+  --match-letter-space: 80px;
   --match-ani-interval: 1s;
   --font-family: Roboto, Arial, Sans-serif;
   --wave-main-col: #4973ff66;
+  --wave-water-dark: rgba(39, 74, 196, 0.9);
 
   /* Wave/button specific variables */
   --wave-grad-start: rgba(194,196,206,1);
@@ -57,15 +58,16 @@
   --menu-scale: 0.85; /* 70% of Start height */
   --menu-size: calc(var(--start-height) * var(--menu-scale));
 
-  /* Progress bar (timer) positioning */
-  --progress-top-margin: 200px;
-  --progress-translateX: -150px;
-  --progress-width: 140px;
-  --progress-height: 26px;
+  /* Circular timer positioning */
+  --timer-top-margin: 170px;
+  --timer-translateX: -250px;
+  --timer-size: 100px;
+  /* Timer specific colors (separate from wave colors) */
+  --timer-water-color: rgba(73, 115, 255, 0.22);
 
   /* Safe-area and UI offsets */
   --ui-top-base: 0px;
-  --ui-bottom-base: 150px;
+  --ui-bottom-base: 50px;
   --ui-top-offset: calc(max(env(safe-area-inset-top, 0px), var(--ui-top-base)));
   --ui-bottom-offset: calc(max(env(safe-area-inset-bottom, 0px), var(--ui-bottom-base)));
 
@@ -115,6 +117,71 @@ body {
   transform-origin: top center;
   width: var(--board-width);
   z-index: 6;
+}
+
+/* remove hud-left anchor */
+
+/****************************************************/
+/*                  Circular Timer                   */
+/****************************************************/
+#circular-timer {
+  position: absolute;
+  top: var(--timer-top-margin);
+  left: 50%;
+  transform: translate(calc(-50% + var(--timer-translateX)), 0);
+  width: var(--timer-size);
+  height: var(--timer-size);
+}
+
+/* circular container: neutral shell (no raised look) */
+#circular-timer {
+  border-radius: 50%;
+  background: var(--base-color);
+  box-shadow: none;
+  overflow: hidden;
+}
+
+/* inner fill holder: debossed (inset) look */
+#circular-timer .ct-fill {
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  background: var(--base-color);
+  overflow: hidden;
+  box-shadow:
+    inset 5px 5px 5px var(--shadow-color2),
+    inset -5px -5px 5px var(--highlight-color1);
+  z-index: 1;
+}
+
+/* simple water rectangle */
+#circular-timer .ct-water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0%;
+  z-index: 1;
+  background: var(--timer-water-color);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+}
+
+#circular-timer .ct-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  font-weight: 900;
+  color: #1f2436;
+  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  z-index: 2;
+  pointer-events: none;
+}
+
+#circular-timer #ct-seconds {
+  font-size: 36px;
 }
 
 /* Scaled controls (bottom) container */

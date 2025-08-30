@@ -4,7 +4,7 @@
 
 import { isInputLocked, setAnimating, setScene, AppScene } from './state.js';
 import { toggleAnimatedText, resetAnimatedText } from './animatedText.js';
-import { toggleTimeBar, setOnTimeOver } from './timer.js';
+import { toggleTimeBar, setOnTimeOver, resetTimer, animateFillToFull, instantEmpty } from './timer.js';
 import { resetOverlayAnimation, resetSpanAnimations, playOverlayAnimation, setOverlayClickHandler, openOverlay, setOverlayContent, closeOverlay } from './overlay.js';
 import { initializePieces, clearBoardInstant, ejectAllPiecesWithGravity } from './pieceManagement.js';
 import { resetScore, getScore } from './score.js';
@@ -32,7 +32,6 @@ button.addEventListener('mouseup', () => {
 function toggleAnimatingStat(bool) {
   setAnimating(bool);
   toggleAnimatedText(bool);
-  toggleTimeBar(!bool);
 }
 
 function gameStart() {
@@ -52,7 +51,12 @@ function gameStart() {
   initializePieces();
   // Show PLAYING label during play
   try { setWord('playing'); } catch (e) {}
-  toggleTimeBar(true);
+  // Reset counter, visually recover water to full, then start drain
+  resetTimer();
+  instantEmpty();
+  animateFillToFull(900).then(() => {
+    toggleTimeBar(true);
+  });
 }
 
 async function gameOver() {
