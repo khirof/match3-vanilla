@@ -4,7 +4,8 @@
 /* Scope to animated text only to avoid leaking styles to other lists (e.g. leaderboard) */
 #animated-text {
   position: absolute;
-  top: var(--match-top-margin); 
+  top: var(--match-top-margin);
+  left: 50%;
   display: flex;
   z-index: 5; /*これないと消える*/
 }
@@ -59,7 +60,7 @@
 /****************************************************/
 #removed-pieces-count {
   position: absolute;
-  top: var(--score-top-margin); 
+  top: var(--score-top-margin);
   left: 50%;
   transform: translateX(calc(-50% + var(--score-translateX)));
   text-align: right;
@@ -97,7 +98,7 @@
 #progressbar{
   height: var(--progress-height);
   position: absolute;
-  top: var(--progress-top-margin); 
+  top: var(--progress-top-margin);
   left: 50%;
   width: var(--progress-width);
   transform: translateX(calc(-50% + var(--progress-translateX)));

@@ -41,134 +41,139 @@
     <script type="text/javascript" src="interact.min.js"></script>
   </head>
   <body>
-    <div id="progressbar">
-      <span id="loading"></span>
-    </div>
-    <ul id="animated-text">
-      <li>M</li>
-      <li>A</li>
-      <li>T</li>
-      <li>C</li>
-      <li>H</li>
-    </ul>
-    <div id="removed-pieces-count">0</div>
-    <div id="top-cover"></div>
-    <table id = "table">
-      <tbody>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tbody>
-    </table>
-    <div id="shape"></div>
-    <button class="wave" id = "button">
-      <!-- <span>START</span> -->
-      <i></i>
-      <div class="text">
-        <p>
-          <span class="word buttonRed">Start</span>
-          <span class="word buttonRed">Restart</span>
-          <span class="word word--playing buttonRed">PLAYING</span>
-        </p>
+    <div id="hud-top">
+      <div id="progressbar">
+        <span id="loading"></span>
       </div>
-    </button>
-    <button class="menu-button" id="menu-button" aria-label="Open menu" title="Menu">⚙</button>
+      <ul id="animated-text">
+        <li>M</li>
+        <li>A</li>
+        <li>T</li>
+        <li>C</li>
+        <li>H</li>
+      </ul>
+      <div id="removed-pieces-count">0</div>
+    </div>
+    <div id="board">
+      <div id="top-cover"></div>
+      <table id = "table">
+        <tbody>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        </tbody>
+      </table>
+      <div id="shape"></div>
+    </div>
+    <div id="controls">
+      <button class="wave" id = "button">
+        <i></i>
+        <div class="text">
+          <p>
+            <span class="word buttonRed">Start</span>
+            <span class="word buttonRed">Restart</span>
+            <span class="word word--playing buttonRed">PLAYING</span>
+          </p>
+        </div>
+      </button>
+      <button class="menu-button" id="menu-button" aria-label="Open menu" title="Menu">⚙</button>
+    </div>
     <div id = "overlay"></div>
     <div class="gameOverContainer">
         <div class="animate four">

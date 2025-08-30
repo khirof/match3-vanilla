@@ -2,12 +2,13 @@
 /*　                     wave                       */
 /****************************************************/
 .wave {
-  top: 925px;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
   position: absolute;
+  bottom: 0;
+  top: auto;
   height: 70px;
-  width:300px;
+  width:var(--start-width);
   border: none;
   display: inline-block;
   overflow: hidden;

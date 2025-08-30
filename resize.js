@@ -3,23 +3,20 @@
 //-------------
 
 function resizeGame() {
-    const gameWidth = 720;
-    const gameHeight = 1200;
+    // Logical game canvas size (board + HUD design space)
+    const designWidth = 720;
+    const designHeight = 1200;
 
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
 
-    const scaleToFitX = windowWidth / gameWidth;
-    const scaleToFitY = windowHeight / gameHeight;
+    const scaleToFitX = windowWidth / designWidth;
+    const scaleToFitY = windowHeight / designHeight;
 
-    const currentScreenRatio = windowWidth / windowHeight;
-    const optimalRatio = Math.min(scaleToFitX, scaleToFitY);
+    const scale = Math.min(scaleToFitX, scaleToFitY);
 
-    if (currentScreenRatio >= 1.77 && currentScreenRatio <= 1.79) {
-        document.body.style.zoom = optimalRatio;
-    } else {
-        document.body.style.zoom = Math.min(scaleToFitX, scaleToFitY);
-    }
+    // Apply scale via CSS variable; used by #board transform
+    document.documentElement.style.setProperty('--board-scale', String(scale));
 }
 
 window.addEventListener('resize', resizeGame);

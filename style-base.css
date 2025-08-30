@@ -21,7 +21,10 @@
   --shadow-color2: #a7a9b3;
   --purewhite-color: #ffffff;
   --textshadow-color: #666870;
-  --table-top-margin: 145px;
+  /* Removed legacy Y-gap variables; use --board-shift-y instead */
+  --board-width: 700px;
+  --board-height: 700px;
+  --board-shift-y: 0px; /* +/- shift relative to vertical center */
   --score-top-margin: 67px;
   --score-width: 250px;
   --score-text-size: 32px;
@@ -42,10 +45,10 @@
   --wave-shadow-light: rgba(255,255,255,0.92);
 
   /* Start/Menu shared geometry */
-  --start-top: 925px;
   --start-width: 300px;
   --start-height: 70px;
   --menu-gap: 105px;
+
   /* Menu specific sizing */  
   --menu-scale: 0.85; /* 70% of Start height */
   --menu-size: calc(var(--start-height) * var(--menu-scale));
@@ -55,6 +58,12 @@
   --progress-translateX: -150px;
   --progress-width: 140px;
   --progress-height: 26px;
+
+  /* Safe-area and UI offsets */
+  --ui-top-base: 16px;
+  --ui-bottom-base: 24px;
+  --ui-top-offset: calc(max(env(safe-area-inset-top, 0px), var(--ui-top-base)));
+  --ui-bottom-offset: calc(max(env(safe-area-inset-bottom, 0px), var(--ui-bottom-base)));
 
 }
 
@@ -79,6 +88,40 @@ body {
   align-items: center;
   background-color: var(--base-color);
   padding: 0;
+}
+
+/* Center-anchored board container */
+#board {
+  position: fixed;
+  left: 50%;
+  top: calc(50% + var(--board-shift-y));
+  transform: translate(-50%, -50%) scale(var(--board-scale, 1));
+  width: var(--board-width);
+  height: var(--board-height);
+  transform-origin: center center;
+  z-index: 2;
+}
+
+/* Scaled HUD (top) container */
+#hud-top {
+  position: fixed;
+  left: 50%;
+  top: var(--ui-top-offset);
+  transform: translateX(-50%) scale(var(--board-scale, 1));
+  transform-origin: top center;
+  width: var(--board-width);
+  z-index: 6;
+}
+
+/* Scaled controls (bottom) container */
+#controls {
+  position: fixed;
+  left: 50%;
+  bottom: var(--ui-bottom-offset);
+  transform: translateX(-50%) scale(var(--board-scale, 1));
+  transform-origin: bottom center;
+  width: var(--board-width);
+  z-index: 6;
 }
 
 /* When Start is visually pressed, mirror its width/height to keep Menu synced */
@@ -116,10 +159,11 @@ body:has(.wave.clicked) {
   transition: box-shadow 0.2s ease, transform 0.02s ease;
 }
 .menu-button {
-  /* Align with Start (.wave): same top and computed left */
-  top: var(--start-top);
+  /* Align with Start (.wave) inside #controls */
+  bottom: 0;
   left: calc(50% + (var(--start-width) / 2) + var(--menu-gap));
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 0);
+  top: auto;
   z-index: 5;
 }
 .menu-button:hover {
@@ -136,16 +180,7 @@ body:has(.wave.clicked) {
     inset -3px -3px 6px var(--wave-shadow-light);
 }
 
-#top-cover {  /* ピース落下の最初の位置に覆いかぶせるカバーみたいなの*/
-  position: absolute;
-  top: 0px;
-  left: 50%;
-  width: 700px;
-  height: var(--table-top-margin);
-  background-color: var(--base-color);
-  transform: translateX(-50%);
-  z-index: 3;
-}
+#top-cover { display: none; }
 
 /****************************************************/
 /*　                 Table                          */
@@ -161,7 +196,7 @@ body:has(.wave.clicked) {
 table {
   position: relative;
   z-index: 2; /* table要素が上に来るようにz-indexを設定 */
-  top: calc(var(--table-top-margin) + 15px);  /* ↓のshadow用shapeの中心点と合わせる */
+  top: 15px;  /* ↓のshadow用shapeの中心点と合わせる */
 }
 #center-score {
   z-index: 5; /* above table(2) and top-cover(3), below overlay(100) */
@@ -169,10 +204,11 @@ table {
 
 #shape {
   position: absolute; /* positionをabsoluteに戻す */
-  top: var(--table-top-margin); 
-  left: center;
-  width: 700px;
-  height: 700px;
+  top: 0; 
+  left: 50%;
+  width: var(--board-width);
+  height: var(--board-height);
+  transform: translateX(-50%);
   background-color: var(--base-color);
   border-radius: 40px;
   box-shadow: inset 13px 13px 13px var(--shadow-color2),
