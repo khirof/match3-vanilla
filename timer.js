@@ -4,7 +4,7 @@
 
 import { canInteract } from './state.js';
 
-const TIME_LIMIT_MS = 60_000; // 60 seconds
+const TIME_LIMIT_MS = 20_000; // 20 seconds
 let onTimeOverCallback = null;
 
 // Accumulator for active (interactable) time
@@ -16,43 +16,24 @@ const DEBUG_TIMER = false;
 function tlog() {}
 
 // Cached DOM
-let circleEl = null; // legacy SVG circle if present
+let circleEl = null; // no longer used; kept for compatibility
 let labelEl = null;
-let waterEl = null;
+let wedgeEl = null; // .ct-fill element controlling conic wedge
 let didLogDom = false;
 let lastLoggedSecond = -1;
 let circumference = 339.292; // replaced at runtime via getTotalLength()
 let isRecovering = false;
 
 function ensureDomCache() {
-  if (!circleEl) circleEl = document.querySelector('#circular-timer .ct-progress');
+  if (!circleEl) circleEl = null;
   if (!labelEl) labelEl = document.getElementById('ct-seconds');
-  if (!waterEl) waterEl = document.querySelector('#circular-timer .ct-water');
-  if (circleEl && typeof circleEl.getTotalLength === 'function') {
-    try {
-      circumference = circleEl.getTotalLength();
-      circleEl.style.strokeDasharray = `${circumference}`;
-      circleEl.style.strokeDashoffset = `${circumference}`;
-    } catch (_) {}
-  }
+  if (!wedgeEl) wedgeEl = document.querySelector('#circular-timer .ct-fill');
+  // no SVG setup needed
 
   if (!didLogDom) {
     const shell = document.getElementById('circular-timer');
-    const fill = document.querySelector('#circular-timer .ct-fill');
-    const shellBox = shell ? shell.getBoundingClientRect() : null;
-    const fillBox = fill ? fill.getBoundingClientRect() : null;
-    const waterBox = waterEl ? waterEl.getBoundingClientRect() : null;
     const cs = shell ? getComputedStyle(shell) : null;
-    tlog('ensureDomCache:', {
-      shellExists: Boolean(shell),
-      fillExists: Boolean(fill),
-      waterExists: Boolean(waterEl),
-      shellBox,
-      fillBox,
-      waterBox,
-      timerSize: cs ? cs.width + ' x ' + cs.height : 'n/a'
-    });
-    if (!waterEl) console.warn('[TIMER] .ct-water not found');
+    tlog('ensureDomCache:', { shellExists: Boolean(shell), wedgeExists: Boolean(wedgeEl), timerSize: cs ? cs.width + ' x ' + cs.height : 'n/a' });
     didLogDom = true;
   }
 }
@@ -64,8 +45,11 @@ export function setOnTimeOver(callback) {
 export function resetTimer() {
   totalActiveMs = 0;
   lastTickMs = 0;
-  updateVisuals(TIME_LIMIT_MS);
-  tlog('resetTimer: remaining=60000ms');
+  ensureDomCache();
+  if (wedgeEl) wedgeEl.style.setProperty('--deg', '0deg');
+  if (labelEl) labelEl.textContent = '0';
+  lastLoggedSecond = -1;
+  tlog('resetTimer: remaining=0ms (idle visuals)');
 }
 
 export function toggleTimeBar(shouldStart) {
@@ -113,7 +97,7 @@ function tick(nowMs) {
 
 function updateVisuals(remainingMs) {
   ensureDomCache();
-  // Update numeric label and water height
+  // Update numeric label and ring stroke
   if (labelEl) {
     const secs = Math.ceil(remainingMs / 1000);
     labelEl.textContent = `${secs}`;
@@ -122,18 +106,18 @@ function updateVisuals(remainingMs) {
       tlog('updateVisuals: secs=', secs, 'remainingMs=', remainingMs);
     }
   }
-  if (!isRecovering && waterEl) {
-    const fillPerc = (remainingMs / TIME_LIMIT_MS);
-    const heightPerc = Math.max(0, Math.min(100, Math.round(fillPerc * 100)));
-    waterEl.style.height = `${heightPerc}%`;
-    if (lastLoggedSecond >= 0) tlog('water height ->', waterEl.style.height);
+  if (!isRecovering && wedgeEl) {
+    const remainingRatio = Math.max(0, Math.min(1, remainingMs / TIME_LIMIT_MS));
+    const filledRatio = 1 - remainingRatio; // grow as time decreases
+    const deg = Math.round(filledRatio * 360);
+    wedgeEl.style.setProperty('--deg', deg + 'deg');
   }
 }
 
 // Public helpers to control water recovery/drain animations
 export function instantEmpty() {
   ensureDomCache();
-  if (waterEl) waterEl.style.height = '0%';
+  if (wedgeEl) wedgeEl.style.setProperty('--deg', '0deg');
   if (labelEl) labelEl.textContent = '0';
   tlog('instantEmpty');
 }
@@ -142,23 +126,27 @@ export function animateFillToFull(durationMs = 1000) {
   ensureDomCache();
   isRecovering = true;
   const start = performance.now();
-  const beginHeight = (() => {
-    const h = waterEl ? parseFloat(waterEl.style.height || '0') : 0;
-    return isNaN(h) ? 0 : h;
+  const beginDeg = (() => {
+    if (wedgeEl) {
+      const v = parseFloat((wedgeEl.style.getPropertyValue('--deg') || '0deg')) || 0;
+      return isNaN(v) ? 0 : v;
+    }
+    return 0;
   })();
-  tlog('animateFillToFull: begin at', beginHeight + '%', 'duration', durationMs, 'ms');
+  tlog('animateFillToFull: begin deg', beginDeg, 'duration', durationMs, 'ms');
   return new Promise((resolve) => {
     const loop = (now) => {
       const t = Math.min(1, (now - start) / durationMs);
       const eased = 1 - Math.pow(1 - t, 3);
-      const h = beginHeight + (100 - beginHeight) * eased;
-      if (waterEl) waterEl.style.height = `${h}%`;
-      if (labelEl) labelEl.textContent = `${Math.ceil(t * 60)}`;
+      const deg = beginDeg + (360 - beginDeg) * eased;
+      if (wedgeEl) wedgeEl.style.setProperty('--deg', deg + 'deg');
+      const limitSec = Math.round(TIME_LIMIT_MS / 1000);
+      if (labelEl) labelEl.textContent = `${Math.ceil(t * limitSec)}`;
       if (t < 1) {
         requestAnimationFrame(loop);
       } else {
         isRecovering = false;
-        tlog('animateFillToFull: complete at 100%');
+        tlog('animateFillToFull: complete, deg=360');
         resolve();
       }
     };

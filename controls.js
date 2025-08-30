@@ -51,7 +51,7 @@ function gameStart() {
   initializePieces();
   // Show PLAYING label during play
   try { setWord('playing'); } catch (e) {}
-  // Reset counter, visually recover water to full, then start drain
+  // Reset visuals to 0, then recover to full with animation and start countdown
   resetTimer();
   instantEmpty();
   animateFillToFull(900).then(() => {

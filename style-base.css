@@ -62,8 +62,8 @@
   --timer-top-margin: 170px;
   --timer-translateX: -250px;
   --timer-size: 100px;
-  /* Timer specific colors (separate from wave colors) */
-  --timer-water-color: rgba(73, 115, 255, 0.22);
+  /* Timer fill colors */
+  --timer-fill-color: rgba(0,0,0,0.10);
 
   /* Safe-area and UI offsets */
   --ui-top-base: 0px;
@@ -133,37 +133,31 @@ body {
   height: var(--timer-size);
 }
 
-/* circular container: neutral shell (no raised look) */
+/* circular container: convex (raised) neumorphism */
 #circular-timer {
   border-radius: 50%;
   background: var(--base-color);
-  box-shadow: none;
-  overflow: hidden;
+  box-shadow:
+    12px 12px 24px rgba(var(--shadow-color1-rgb), 0.45),
+    -12px -12px 24px rgba(var(--highlight-color1-rgb), 0.9);
 }
 
-/* inner fill holder: debossed (inset) look */
+/* Wedge fill using conic-gradient */
 #circular-timer .ct-fill {
   position: absolute;
-  inset: 4px;
+  inset: 0;
   border-radius: 50%;
   background: var(--base-color);
-  overflow: hidden;
-  box-shadow:
-    inset 5px 5px 5px var(--shadow-color2),
-    inset -5px -5px 5px var(--highlight-color1);
-  z-index: 1;
+  box-shadow: none;
+  --deg: 0deg;
+  --fill: var(--timer-fill-color);
 }
-
-/* simple water rectangle */
-#circular-timer .ct-water {
+#circular-timer .ct-fill::before {
+  content: "";
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 0%;
-  z-index: 1;
-  background: var(--timer-water-color);
-  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--fill) var(--deg), transparent 0deg 360deg);
 }
 
 #circular-timer .ct-label {
@@ -175,7 +169,7 @@ body {
   font-family: var(--font-family);
   font-weight: 900;
   color: #1f2436;
-  text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+  text-shadow: -2px -2px 0 var(--purewhite-color), 2px 2px 0 var(--textshadow-color);
   z-index: 2;
   pointer-events: none;
 }
